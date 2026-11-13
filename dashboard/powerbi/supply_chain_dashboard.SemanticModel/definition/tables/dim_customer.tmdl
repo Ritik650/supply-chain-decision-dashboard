@@ -1,0 +1,76 @@
+/// Customers (store location; personal data dropped).
+table dim_customer
+	lineageTag: 6c4b7f25-5011-556f-b047-4a30c96ee32e
+
+	column customer_key
+		dataType: int64
+		isHidden
+		lineageTag: f0acad1f-4aa5-567f-bd4e-a00f7fea149f
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = User
+
+	column segment
+		dataType: string
+		lineageTag: 0029317d-a332-5fb6-abcc-03a7ddcc3f2e
+		summarizeBy: none
+		sourceColumn: segment
+
+		annotation SummarizationSetBy = User
+
+	column city
+		dataType: string
+		lineageTag: 543b50e5-ada5-5866-ae0b-6c3f17534dfc
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = User
+
+	column state
+		dataType: string
+		lineageTag: fae65501-d453-5434-9c22-32d3a7883f1c
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = User
+
+	column country
+		dataType: string
+		lineageTag: 27031f16-3339-5c10-babe-27556466e7df
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = User
+
+	column first_order_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 75c9f682-3da5-5a7a-9daf-0436536ca66d
+		summarizeBy: none
+		sourceColumn: first_order_date
+
+		annotation SummarizationSetBy = User
+
+	/// month of first valid order
+	column cohort_month
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: a781fb6e-3c01-5a15-9964-7a88f238fdb6
+		summarizeBy: none
+		sourceColumn: cohort_month
+
+		annotation SummarizationSetBy = User
+
+	partition dim_customer = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_customer.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"customer_key", "segment", "city", "state", "country", "first_order_date", "cohort_month"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"customer_key", Int64.Type}, {"segment", type text}, {"city", type text}, {"state", type text}, {"country", type text}, {"first_order_date", type date}, {"cohort_month", type date}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

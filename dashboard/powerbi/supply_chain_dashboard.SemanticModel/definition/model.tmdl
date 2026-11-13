@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DataFolder", "fact_order_items", "dim_date", "dim_customer", "dim_product", "dim_geography", "dim_shipping", "rfm_segments", "cohort_retention", "rfm_validation"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fact_order_items
+ref table dim_date
+ref table dim_customer
+ref table dim_product
+ref table dim_geography
+ref table dim_shipping
+ref table rfm_segments
+ref table cohort_retention
+ref table rfm_validation
+ref table 'Max Discount'
+ref table 'First Class Promise'
+ref table 'Second Class Promise'
+ref table _Measures

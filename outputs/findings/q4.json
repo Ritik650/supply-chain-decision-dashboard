@@ -1,0 +1,85 @@
+{
+  "products": 100,
+  "top20_profit_share": 0.9611265004404932,
+  "top20_revenue_share": 0.9609825084223147,
+  "a_class_products": 7,
+  "a_class_profit_share": 0.8256453415494139,
+  "spearman_profit_revenue_rank": 0.9036183618361835,
+  "loss_making_products": 2,
+  "loss_making_products_detail": [
+    {
+      "product_name": "SOLE E35 Elliptical",
+      "revenue": 9779.94,
+      "profit": -724.47,
+      "order_items": 6
+    },
+    {
+      "product_name": "SOLE E25 Elliptical",
+      "revenue": 1779.98,
+      "profit": -2519.9300000000003,
+      "order_items": 2
+    }
+  ],
+  "flagged_low_margin": 11,
+  "flagged_below_overall_ci": 1,
+  "overall_margin": 0.11980642614981002,
+  "loss_line_share": 0.18700021874924044,
+  "loss_line_amount": 3461393.27,
+  "loss_line_tests": {
+    "product": {
+      "p_value": 0.7150561984892847,
+      "cramers_v": 0.016975644282249548,
+      "min": 0.13432835820895522,
+      "max": 0.22448979591836735
+    },
+    "category": {
+      "p_value": 0.6410558290485154,
+      "cramers_v": 0.012953299344991363,
+      "min": 0.09836065573770492,
+      "max": 0.21713147410358566
+    },
+    "discount band": {
+      "p_value": 0.49687815829287363,
+      "cramers_v": 0.004529662246316515,
+      "min": 0.18389547914502816,
+      "max": 0.18853175904668198
+    }
+  },
+  "a_class_list": [
+    {
+      "product_name": "Field & Stream Sportsman 16 Gun Fire Safe",
+      "profit": 730159.120000001,
+      "profit_margin": 0.12252353725529622
+    },
+    {
+      "product_name": "Perfect Fitness Perfect Rip Deck",
+      "profit": 472867.7899999985,
+      "profit_margin": 0.12446010731313535
+    },
+    {
+      "product_name": "Diamondback Women's Serene Classic Comfort Bi",
+      "profit": 409215.2399999979,
+      "profit_margin": 0.1155173165949644
+    },
+    {
+      "product_name": "Nike Men's Free 5.0+ Running Shoe",
+      "profit": 358365.1299999999,
+      "profit_margin": 0.1139098995510047
+    },
+    {
+      "product_name": "Nike Men's Dri-FIT Victory Golf Polo",
+      "profit": 334162.5700000004,
+      "profit_margin": 0.1236161020054355
+    },
+    {
+      "product_name": "Pelican Sunstream 100 Kayak",
+      "profit": 307522.80000000034,
+      "profit_margin": 0.11551285114782782
+    },
+    {
+      "product_name": "O'Brien Men's Neoprene Life Vest",
+      "profit": 302190.72999999864,
+      "profit_margin": 0.12173399859017785
+    }
+  ]
+}

@@ -1,0 +1,692 @@
+/// All report measures, grouped by display folder.
+table _Measures
+	lineageTag: 086298b2-8751-5484-ba33-834a9bc41a05
+
+	/// Order items excluding cancelled and suspected-fraud
+	measure 'Valid Items' = CALCULATE ( COUNTROWS ( fact_order_items ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 1 Core KPIs
+		lineageTag: e4e1fc43-a76b-5405-a653-e8a05e6bd23c
+
+	/// Net revenue: sum of item_total over valid order items
+	measure Revenue = CALCULATE ( SUM ( fact_order_items[item_total] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 1 Core KPIs
+		lineageTag: 011a8f9e-42ec-5f16-80d2-ccfefe61c1f4
+
+	measure Profit = CALCULATE ( SUM ( fact_order_items[profit] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 1 Core KPIs
+		lineageTag: e11580dd-4cd5-568c-8cd6-21e071efa24d
+
+	/// Profit / revenue
+	measure 'Profit Margin %' = DIVIDE ( [Profit], [Revenue] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 1 Core KPIs
+		lineageTag: 9b038cfe-aa94-5438-9a99-4cf4854a7ff7
+
+	measure Orders = CALCULATE ( DISTINCTCOUNT ( fact_order_items[order_id] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 1 Core KPIs
+		lineageTag: 24633062-bcf1-5465-859c-f65b0496a5ad
+
+	measure 'Avg Order Value' = DIVIDE ( [Revenue], [Orders] )
+		formatString: \$#,0.00;-\$#,0.00;\$#,0.00
+		displayFolder: 1 Core KPIs
+		lineageTag: 1d606776-417a-5e06-9a09-fb5d4ed32f62
+
+	measure 'Discount Spend' = CALCULATE ( SUM ( fact_order_items[discount] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 1 Core KPIs
+		lineageTag: 96a36faf-30e4-5226-bf4d-f2d7ee9b3a72
+
+	measure 'Avg Units per Line' = CALCULATE ( AVERAGE ( fact_order_items[quantity] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: 0.00
+		displayFolder: 1 Core KPIs
+		lineageTag: d38cda71-d677-5c62-b2dc-76f53d083d74
+
+	measure Customers = CALCULATE ( DISTINCTCOUNT ( fact_order_items[customer_key] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 1 Core KPIs
+		lineageTag: f4f12c73-0e76-54b8-9af0-23f503fc19f5
+
+	/// Months with valid orders in the current filter (used to annualise)
+	measure 'Months Selected' = COUNTROWS ( SUMMARIZE ( FILTER ( fact_order_items, fact_order_items[is_valid_order] ), dim_date[month_start] ) )
+		formatString: #,0
+		displayFolder: 1 Core KPIs
+		lineageTag: c7474891-f5fb-55d4-9351-d7a218d8f2de
+
+	measure 'Last Month Start' = CALCULATE ( MAX ( dim_date[month_start] ), FILTER ( fact_order_items, fact_order_items[is_valid_order] ) )
+		formatString: mmm yyyy
+		displayFolder: 2 Month on month
+		lineageTag: 01307dfb-131c-55b1-a097-e087f5913ca0
+
+	measure 'Revenue MoM %' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Revenue], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Revenue], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    DIVIDE ( cur - prev, prev )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: ebc77272-d63c-5d60-b002-d73aab9543ce
+
+	measure 'Profit MoM %' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Profit], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Profit], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    DIVIDE ( cur - prev, prev )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: c4f728f0-b360-564b-91c4-72b7cf297883
+
+	measure 'Margin MoM pts' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Profit Margin %], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Profit Margin %], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    cur - prev
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: 9afd5b15-5486-523b-82e5-8604656f93d6
+
+	measure 'Late Rate MoM pts' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Late Rate %], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Late Rate %], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    cur - prev
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: ac18a440-f2c6-5dcf-a4cd-c1e2319c8453
+
+	measure 'Orders MoM %' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Orders], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Orders], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    DIVIDE ( cur - prev, prev )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: 19706921-60ec-5139-967d-2ce22df0096c
+
+	measure 'AOV MoM %' =
+			VAR m = [Last Month Start]
+			VAR cur = CALCULATE ( [Avg Order Value], REMOVEFILTERS ( dim_date ), dim_date[month_start] = m )
+			VAR prev = CALCULATE ( [Avg Order Value], REMOVEFILTERS ( dim_date ), dim_date[month_start] = EDATE ( m, -1 ) )
+			RETURN
+			    DIVIDE ( cur - prev, prev )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 2 Month on month
+		lineageTag: f75a4998-dd74-5933-ab06-6b73a651c9bf
+
+	measure 'MoM Suffix' = " vs " & FORMAT ( EDATE ( [Last Month Start], -1 ), "mmm yy" )
+		displayFolder: 2 Month on month
+		lineageTag: dc13e801-936e-5332-ba54-e9e9dde3d71f
+
+	measure 'Revenue MoM' = FORMAT ( [Revenue MoM %], "+0.0%;-0.0%" ) & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: fcc02f7a-be0a-534f-9960-79a06fa06552
+
+	measure 'Profit MoM' = FORMAT ( [Profit MoM %], "+0.0%;-0.0%" ) & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: 87cde41a-f771-5f3a-aba8-068f5ea2fc80
+
+	measure 'Margin MoM' = FORMAT ( [Margin MoM pts] * 100, "+0.0;-0.0" ) & " pts" & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: 5df09468-b99f-59e5-ae66-548c0bf955c1
+
+	measure 'Late Rate MoM' = FORMAT ( [Late Rate MoM pts] * 100, "+0.0;-0.0" ) & " pts" & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: 7de43dee-c9ef-5fc6-830b-c58ac578bfbd
+
+	measure 'Orders MoM' = FORMAT ( [Orders MoM %], "+0.0%;-0.0%" ) & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: 39ab3c71-f3d8-5585-8591-781a37f08c95
+
+	measure 'AOV MoM' = FORMAT ( [AOV MoM %], "+0.0%;-0.0%" ) & [MoM Suffix]
+		displayFolder: 2 Month on month
+		lineageTag: d6db3fb0-316a-5815-8284-f523757e26d9
+
+	measure 'Late Items' = CALCULATE ( COUNTROWS ( fact_order_items ), fact_order_items[is_valid_order] = TRUE (), fact_order_items[is_late] = TRUE () )
+		formatString: #,0
+		displayFolder: 3 Delivery
+		lineageTag: 0fc305fb-1b52-5723-94f5-2a7b53ee777e
+
+	/// Items delivered after the promised day / valid items
+	measure 'Late Rate %' = DIVIDE ( [Late Items], [Valid Items] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 3 Delivery
+		lineageTag: cb5155f8-881a-57a2-8c4a-7f2e8b8990ca
+
+	measure 'On-time %' = 1 - [Late Rate %]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 3 Delivery
+		lineageTag: 8ec9eb05-4e2b-5ee5-b05b-2d77fe148919
+
+	/// Mean of actual - scheduled days over late items only
+	measure 'Avg Delay Days (late items)' = CALCULATE ( AVERAGE ( fact_order_items[delay_days] ), fact_order_items[is_valid_order] = TRUE (), fact_order_items[is_late] = TRUE () )
+		formatString: 0.00
+		displayFolder: 3 Delivery
+		lineageTag: 021ea47c-75cf-5e39-b6e6-0ca97c4e9ae5
+
+	measure 'Avg Actual Days' = CALCULATE ( AVERAGE ( fact_order_items[actual_days] ), fact_order_items[is_valid_order] = TRUE () )
+		formatString: 0.00
+		displayFolder: 3 Delivery
+		lineageTag: c37530e7-8bdb-5353-b671-443e0a4d03fe
+
+	measure 'Promised Days' = MAX ( dim_shipping[promised_days] )
+		formatString: 0
+		displayFolder: 3 Delivery
+		lineageTag: 0b382607-cd9c-588a-bb8b-2704fdbd40e0
+
+	/// Blank for mode x region cells with fewer than 200 items
+	measure 'Late Rate % (heatmap)' = IF ( [Valid Items] >= 200, [Late Rate %] )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: 0e0204c3-456b-5cbb-a520-a1f5d3bf290b
+
+	measure 'Heatmap Color' =
+			VAR v = [Late Rate % (heatmap)]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( v ), BLANK (),
+			        v < 0.35, "#F6E3E2",
+			        v < 0.45, "#F2B8B5",
+			        v < 0.55, "#EC9592",
+			        v < 0.70, "#E5716E",
+			        v < 0.90, "#D03B3B",
+			        "#7F1D1D"
+			    )
+		displayFolder: 3 Delivery
+		lineageTag: dd285e01-a55c-58ca-8507-0e4cce40cc6b
+
+	measure 'Heatmap Font Color' = IF ( [Late Rate % (heatmap)] >= 0.55, "#FFFFFF", "#111110" )
+		displayFolder: 3 Delivery
+		lineageTag: 0081e5fe-9d47-5d25-b816-51cbd7468e51
+
+	measure 'Share of Mode Items' = DIVIDE ( [Valid Items], CALCULATE ( [Valid Items], REMOVEFILTERS ( fact_order_items[actual_days] ) ) )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: 1cacdb21-877c-5091-8601-2ff9dbd464cc
+
+	measure 'Share of Items (Same Day)' = CALCULATE ( [Share of Mode Items], dim_shipping[shipping_mode] = "Same Day" )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: a57b397f-6f1c-53dd-8b74-d1061082381c
+
+	measure 'Share of Items (First Class)' = CALCULATE ( [Share of Mode Items], dim_shipping[shipping_mode] = "First Class" )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: 1ab2efa3-8cf7-5503-9a49-cc48468cd62d
+
+	measure 'Share of Items (Second Class)' = CALCULATE ( [Share of Mode Items], dim_shipping[shipping_mode] = "Second Class" )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: 9ea78b1f-368b-5320-84d2-01ec4d9828a1
+
+	measure 'Share of Items (Standard Class)' = CALCULATE ( [Share of Mode Items], dim_shipping[shipping_mode] = "Standard Class" )
+		formatString: 0%;-0%;0%
+		displayFolder: 3 Delivery
+		lineageTag: 58d04e76-b37b-5ba6-a643-30900da6cf8a
+
+	measure 'Bar Color (Same Day)' =
+			VAR promise =
+			    CALCULATE ( MAX ( dim_shipping[promised_days] ), REMOVEFILTERS ( dim_shipping ), dim_shipping[shipping_mode] = "Same Day" )
+			RETURN
+			    IF ( SELECTEDVALUE ( fact_order_items[actual_days] ) > promise, "#D03B3B", "#A8A69F" )
+		displayFolder: 3 Delivery
+		lineageTag: 5604498b-2949-5e24-affe-9121dcea272d
+
+	measure 'Bar Color (First Class)' =
+			VAR promise =
+			    CALCULATE ( MAX ( dim_shipping[promised_days] ), REMOVEFILTERS ( dim_shipping ), dim_shipping[shipping_mode] = "First Class" )
+			RETURN
+			    IF ( SELECTEDVALUE ( fact_order_items[actual_days] ) > promise, "#D03B3B", "#A8A69F" )
+		displayFolder: 3 Delivery
+		lineageTag: 3c2a9375-5f1d-5ced-9973-b228fc2d94c0
+
+	measure 'Bar Color (Second Class)' =
+			VAR promise =
+			    CALCULATE ( MAX ( dim_shipping[promised_days] ), REMOVEFILTERS ( dim_shipping ), dim_shipping[shipping_mode] = "Second Class" )
+			RETURN
+			    IF ( SELECTEDVALUE ( fact_order_items[actual_days] ) > promise, "#D03B3B", "#A8A69F" )
+		displayFolder: 3 Delivery
+		lineageTag: b3c68692-e39b-5112-8ee9-d57606311df8
+
+	measure 'Bar Color (Standard Class)' =
+			VAR promise =
+			    CALCULATE ( MAX ( dim_shipping[promised_days] ), REMOVEFILTERS ( dim_shipping ), dim_shipping[shipping_mode] = "Standard Class" )
+			RETURN
+			    IF ( SELECTEDVALUE ( fact_order_items[actual_days] ) > promise, "#D03B3B", "#A8A69F" )
+		displayFolder: 3 Delivery
+		lineageTag: 951d64d1-a10e-5483-8e0f-6b18a96a66d2
+
+	measure 'Margin at or below 10%' = CALCULATE ( [Profit Margin %], fact_order_items[discount_rate] <= 0.10 )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 4 Discounts
+		lineageTag: 78cb6845-ad21-5953-be07-9aca384b1891
+
+	measure 'Margin above 10%' = CALCULATE ( [Profit Margin %], fact_order_items[discount_rate] > 0.10 )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 4 Discounts
+		lineageTag: 5840fa50-9012-5b87-a133-88376f4949fe
+
+	measure 'Margin Gap pts' = ( [Margin above 10%] - [Margin at or below 10%] ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 4 Discounts
+		lineageTag: f8584003-f11b-56ee-a107-a3261fddc3aa
+
+	measure 'Units at or below 10%' = CALCULATE ( [Avg Units per Line], fact_order_items[discount_rate] <= 0.10 )
+		formatString: 0.00
+		displayFolder: 4 Discounts
+		lineageTag: 9e5c6e92-7790-50aa-93c2-042518c46a02
+
+	measure 'Units above 10%' = CALCULATE ( [Avg Units per Line], fact_order_items[discount_rate] > 0.10 )
+		formatString: 0.00
+		displayFolder: 4 Discounts
+		lineageTag: ca16cace-bd75-5db3-9ce2-0f18f1b09ff1
+
+	/// Discount given above a 10% rate in the current filter
+	measure 'Discount Above 10%' = SUMX ( FILTER ( fact_order_items, fact_order_items[is_valid_order] && fact_order_items[discount_rate] > 0.10 + 0.000001 ), ( fact_order_items[discount_rate] - 0.10 ) * fact_order_items[sales] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 4 Discounts
+		lineageTag: d5555fc7-8f3d-552e-a32b-ad99c1cf767b
+
+	measure 'Discount Above 10% per Year' = DIVIDE ( [Discount Above 10%] * 12, [Months Selected] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 4 Discounts
+		lineageTag: 89a6d791-7195-55e0-b1ab-6796c8ea6cb5
+
+	measure 'Cat Items' = IF ( [Valid Items] >= 500, [Valid Items] )
+		formatString: #,0
+		displayFolder: 4 Discounts
+		lineageTag: bd0b97ce-5aae-5430-b8cf-2d662af464e8
+
+	measure 'Cat Margin at or below 10%' = IF ( [Valid Items] >= 500, [Margin at or below 10%] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 4 Discounts
+		lineageTag: 37893579-b790-5324-bbc0-e9ddde46f20e
+
+	measure 'Cat Margin above 10%' = IF ( [Valid Items] >= 500, [Margin above 10%] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 4 Discounts
+		lineageTag: f5d8abdb-0747-5a22-ba51-17b3e07a2b40
+
+	measure 'Cat Margin Gap pts' = IF ( [Valid Items] >= 500, [Margin Gap pts] )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 4 Discounts
+		lineageTag: 42edf0fe-8714-5907-8c59-2c2fb7228f5f
+
+	measure 'Cat Units at or below 10%' = IF ( [Valid Items] >= 500, [Units at or below 10%] )
+		formatString: 0.00
+		displayFolder: 4 Discounts
+		lineageTag: a5508317-9ccc-5afa-bbc1-5409f8c4eee2
+
+	measure 'Cat Units above 10%' = IF ( [Valid Items] >= 500, [Units above 10%] )
+		formatString: 0.00
+		displayFolder: 4 Discounts
+		lineageTag: 94d1a0a9-87d9-56f7-9590-22e30650d2cd
+
+	measure 'Cat Discount Above 10%' = IF ( [Valid Items] >= 500, [Discount Above 10%] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 4 Discounts
+		lineageTag: 826138df-48da-5138-894b-cdc0b47ad0db
+
+	measure 'Gap Font Color' = IF ( [Cat Margin Gap pts] < -1, "#D03B3B", "#111110" )
+		displayFolder: 4 Discounts
+		lineageTag: 92bdcbe4-f5b3-5dc3-903c-44e294e51d08
+
+	/// Within-product elasticity from notebooks/q2_discounts.ipynb: -0.006 (95% CI -0.057 to +0.044), floored at 0
+	measure 'Elasticity (central)' = 0
+		formatString: 0.000
+		displayFolder: 8 What-if
+		lineageTag: 5edbe140-91ef-552c-961b-9d6cda505a23
+
+	measure 'Items Above Cap' = VAR cap = [Max Discount Value] RETURN CALCULATE ( [Valid Items], fact_order_items[discount_rate] > cap + 0.000001 )
+		formatString: #,0
+		displayFolder: 8 What-if
+		lineageTag: 0236e3d2-d5d5-59f3-933f-ff21ba782d9c
+
+	/// HIGH: items above the cap re-priced at the cap, unit cost fixed, volume holds
+	measure 'Profit Recovered per Year (volume holds)' =
+			VAR cap = [Max Discount Value]
+			VAR uplift =
+			    SUMX ( FILTER ( fact_order_items, fact_order_items[is_valid_order] && fact_order_items[discount_rate] > cap + 0.000001 ), ( fact_order_items[discount_rate] - cap ) * fact_order_items[sales] )
+			RETURN
+			    DIVIDE ( uplift * 12, [Months Selected] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 8 What-if
+		lineageTag: c3d9081c-52ce-5226-b4a8-d333732cbf7b
+
+	/// CENTRAL: volume responds with the elasticity measured in the data
+	measure 'Profit Recovered per Year (central)' =
+			VAR cap = [Max Discount Value]
+			VAR beta = [Elasticity (central)]
+			VAR delta =
+			    SUMX (
+			        FILTER ( fact_order_items, fact_order_items[is_valid_order] && fact_order_items[discount_rate] > cap + 0.000001 ),
+			        VAR r = fact_order_items[discount_rate]
+			        VAR newp = fact_order_items[profit] + ( r - cap ) * fact_order_items[sales]
+			        RETURN newp * EXP ( beta * ( cap - r ) ) - fact_order_items[profit]
+			    )
+			RETURN
+			    DIVIDE ( delta * 12, [Months Selected] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 8 What-if
+		lineageTag: 0e34393f-7fc4-5cba-86c8-50e9c8fb6278
+
+	/// LOW: stress case, an ASSUMED price elasticity of -1.5 (not estimated from this data)
+	measure 'Profit Recovered per Year (low)' =
+			VAR cap = [Max Discount Value]
+			VAR delta =
+			    SUMX (
+			        FILTER ( fact_order_items, fact_order_items[is_valid_order] && fact_order_items[discount_rate] > cap + 0.000001 ),
+			        VAR r = fact_order_items[discount_rate]
+			        VAR newp = fact_order_items[profit] + ( r - cap ) * fact_order_items[sales]
+			        VAR keep = MAX ( 0, 1 - 1.5 * ( r - cap ) / ( 1 - r ) )
+			        RETURN newp * keep - fact_order_items[profit]
+			    )
+			RETURN
+			    DIVIDE ( delta * 12, [Months Selected] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 8 What-if
+		lineageTag: 09920997-d7db-52f5-ab20-66eb33ecac05
+
+	/// Share of the capped items' volume that could be lost before the cap stops paying
+	measure 'Break-even Volume Loss %' =
+			VAR cap = [Max Discount Value]
+			VAR affected = FILTER ( fact_order_items, fact_order_items[is_valid_order] && fact_order_items[discount_rate] > cap + 0.000001 )
+			VAR uplift = SUMX ( affected, ( fact_order_items[discount_rate] - cap ) * fact_order_items[sales] )
+			VAR profitNow = SUMX ( affected, fact_order_items[profit] )
+			RETURN
+			    DIVIDE ( uplift, profitNow + uplift )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 8 What-if
+		lineageTag: 91ace7e0-4acc-52bd-a959-005c3bbdea03
+
+	/// Late rate if First and Second Class promised the selected days; actual days as observed
+	measure 'Late Rate % (what-if promises)' =
+			VAR p1 = [First Class Promise Value]
+			VAR p2 = [Second Class Promise Value]
+			VAR lateCount =
+			    SUMX (
+			        FILTER ( fact_order_items, fact_order_items[is_valid_order] ),
+			        VAR mode = RELATED ( dim_shipping[shipping_mode] )
+			        VAR promise = SWITCH ( mode, "First Class", p1, "Second Class", p2, RELATED ( dim_shipping[promised_days] ) )
+			        RETURN IF ( fact_order_items[actual_days] > promise, 1, 0 )
+			    )
+			RETURN
+			    DIVIDE ( lateCount, [Valid Items] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 8 What-if
+		lineageTag: 5d97cb80-642a-5461-b01b-30fb5161b7da
+
+	measure 'Late Rate Change (what-if)' = [Late Rate % (what-if promises)] - [Late Rate %]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 8 What-if
+		lineageTag: fb4c0610-f8f4-595d-9b31-3d911b80ea1c
+
+	measure 'Segment Revenue Share' = DIVIDE ( [Revenue], CALCULATE ( [Revenue], ALLSELECTED ( rfm_segments[rfm_segment] ) ) )
+		formatString: 0%;-0%;0%
+		displayFolder: 5 Customers
+		lineageTag: 1e42fc43-f0bc-53c7-9b12-a1f5314f0afc
+
+	measure 'Segment Customer Share' = DIVIDE ( [Customers], CALCULATE ( [Customers], ALLSELECTED ( rfm_segments[rfm_segment] ) ) )
+		formatString: 0%;-0%;0%
+		displayFolder: 5 Customers
+		lineageTag: e15c57f8-458c-5018-bf77-77fb3a442609
+
+	measure 'Avg Orders per Customer' = AVERAGE ( rfm_segments[frequency] )
+		formatString: 0.0
+		displayFolder: 5 Customers
+		lineageTag: 6862f3a4-ff91-56e7-994c-cbd018b3af04
+
+	measure 'Champions Revenue Share' =
+			DIVIDE (
+			    CALCULATE ( [Revenue], rfm_segments[rfm_segment] = "Champions" ),
+			    CALCULATE ( [Revenue], REMOVEFILTERS ( rfm_segments ) )
+			)
+		formatString: 0%;-0%;0%
+		displayFolder: 5 Customers
+		lineageTag: c60a4399-ac56-5bc5-b3fc-6717eb3a8682
+
+	/// Pooled over cohorts Jan 2015 - Jun 2017; the cohort table ignores slicers
+	measure 'Month-3 Retention' =
+			DIVIDE (
+			    CALCULATE ( SUM ( cohort_retention[active_customers] ), cohort_retention[month_index] = 3 ),
+			    CALCULATE (
+			        SUM ( cohort_retention[active_customers] ),
+			        cohort_retention[month_index] = 0,
+			        cohort_retention[cohort_month] <= DATE ( 2017, 6, 1 )
+			    )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 5 Customers
+		lineageTag: 6f83eaf1-05a2-5b5e-8a52-b1b35ed68926
+
+	measure 'Next 6m Buyers Range' =
+			FORMAT ( MIN ( rfm_validation[share_ordering_next_6m] ), "0%" ) & " to "
+			    & FORMAT ( MAX ( rfm_validation[share_ordering_next_6m] ), "0%" )
+		displayFolder: 5 Customers
+		lineageTag: 213a6e82-f3ff-59eb-a66e-f48a5e2daec6
+
+	measure 'RFM Next 6m Share' = AVERAGE ( rfm_validation[share_ordering_next_6m] )
+		formatString: 0%;-0%;0%
+		displayFolder: 5 Customers
+		lineageTag: 34bbf4d9-1c1d-5400-bd17-0bfc3010e636
+
+	measure 'RFM Past Revenue per Customer' = AVERAGE ( rfm_validation[past_revenue_per_customer] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 5 Customers
+		lineageTag: 85586c5e-a6ee-504e-a1aa-9ef4a1e0009e
+
+	/// Months 1-24 for cohorts of at least 50 customers
+	measure 'Cohort Retention (shown)' =
+			VAR k = MAX ( cohort_retention[month_index] )
+			RETURN
+			    IF ( k >= 1 && k <= 24 && MAX ( cohort_retention[cohort_size] ) >= 50, AVERAGE ( cohort_retention[retention] ) )
+		formatString: 0%;-0%;0%
+		displayFolder: 5 Customers
+		lineageTag: 417e7b8b-d976-5589-9daf-bbdece75223d
+
+	measure 'Cohort Color' =
+			VAR v = [Cohort Retention (shown)]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( v ), BLANK (),
+			        v < 0.09, "#ECEBE7",
+			        v < 0.11, "#D6D4CE",
+			        v < 0.13, "#B9B7B0",
+			        v < 0.15, "#8A8984",
+			        v < 0.18, "#6B6A65",
+			        "#3F3E3B"
+			    )
+		displayFolder: 5 Customers
+		lineageTag: 4ed43cd8-d4ee-5948-9f88-942fb22b2f73
+
+	measure 'Cohort Font Color' = IF ( [Cohort Retention (shown)] >= 0.15, "#FFFFFF", "#111110" )
+		displayFolder: 5 Customers
+		lineageTag: b00cf21a-f75e-5296-aa88-38c0c2336ae0
+
+	measure 'Product Profit Rank' = IF ( NOT ISBLANK ( [Profit] ), RANKX ( ALLSELECTED ( dim_product[product_name] ), [Profit], , DESC, DENSE ) )
+		formatString: #,0
+		displayFolder: 6 Products
+		lineageTag: df27f21f-5148-5ae0-b11a-b2243cc191c8
+
+	measure 'Cumulative Profit Share' =
+			VAR p = [Profit]
+			VAR cum =
+			    SUMX ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] >= p ), [Profit] )
+			RETURN
+			    IF ( NOT ISBLANK ( p ), DIVIDE ( cum, CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) ) )
+		formatString: 0%;-0%;0%
+		displayFolder: 6 Products
+		lineageTag: 82dbf002-cf93-5eed-b1f7-804c8060c964
+
+	/// A = first 80% of cumulative profit, B = next 15%, C = the rest
+	measure 'ABC Class' =
+			VAR own = DIVIDE ( [Profit], CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) )
+			VAR priorShare = [Cumulative Profit Share] - own
+			RETURN
+			    IF ( NOT ISBLANK ( [Revenue] ), SWITCH ( TRUE (), priorShare < 0.80, "A", priorShare < 0.95, "B", "C" ) )
+		displayFolder: 6 Products
+		lineageTag: 18cc836e-a8d4-58ae-8afe-2d31192dc674
+
+	measure 'A-class Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [ABC Class] = "A" ) )
+		formatString: 0
+		displayFolder: 6 Products
+		lineageTag: 798bc976-9385-52bc-be38-034615d5f801
+
+	measure 'Profit Share Top 20% Products' =
+			VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+			VAR n = ROUNDUP ( 0.2 * COUNTROWS ( sold ), 0 )
+			VAR topSet = TOPN ( n, sold, [Profit], DESC )
+			RETURN
+			    DIVIDE ( SUMX ( topSet, [Profit] ), SUMX ( sold, [Profit] ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Products
+		lineageTag: 07298e85-0dfb-59bd-a015-97b672e59a4d
+
+	measure 'Loss-making Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] < 0 ) ) + 0
+		formatString: 0
+		displayFolder: 6 Products
+		lineageTag: cc757db8-f8a9-52bf-ae17-4bb1fd96488c
+
+	measure 'Loss-making Line Share' = DIVIDE ( CALCULATE ( [Valid Items], fact_order_items[profit] < 0 ), [Valid Items] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Products
+		lineageTag: 17970140-2021-52e7-bb0d-30cca9296d9b
+
+	measure 'Pareto Share (top 30)' = IF ( [Product Profit Rank] <= 30, [Cumulative Profit Share] )
+		formatString: 0%;-0%;0%
+		displayFolder: 6 Products
+		lineageTag: 893c66a2-86a6-558f-9aa6-4554155af4a9
+
+	measure 'Top15 Revenue' = IF ( [Product Profit Rank] <= 15, [Revenue] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 6 Products
+		lineageTag: af37b423-f830-593d-a157-b7c61c1ea678
+
+	measure 'Top15 Profit' = IF ( [Product Profit Rank] <= 15, [Profit] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 6 Products
+		lineageTag: c0aa589c-bfc5-5a44-a413-2c5667e8e656
+
+	measure 'Top15 Margin' = IF ( [Product Profit Rank] <= 15, [Profit Margin %] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Products
+		lineageTag: 6157edbe-b5d7-50fd-8c23-410840a9a855
+
+	measure 'Top15 Cumulative Share' = IF ( [Product Profit Rank] <= 15, [Cumulative Profit Share] )
+		formatString: 0%;-0%;0%
+		displayFolder: 6 Products
+		lineageTag: 4c5a2f8e-6aa8-5ead-bfa0-7dde64e2846f
+
+	measure 'Top15 Class' = IF ( [Product Profit Rank] <= 15, [ABC Class] )
+		displayFolder: 6 Products
+		lineageTag: e1f33c7e-c222-5592-af04-bd15c052d1bd
+
+	/// 1 for top-half-revenue products with margin under 10%, or any loss-maker
+	measure 'Watch List Flag' =
+			VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+			VAR revRank = RANKX ( sold, [Revenue], , DESC )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( [Revenue] )
+			            && ( [Profit] < 0 || ( revRank <= COUNTROWS ( sold ) / 2 && [Profit Margin %] < 0.10 ) ),
+			        1,
+			        0
+			    )
+		formatString: 0
+		displayFolder: 6 Products
+		lineageTag: 1651ffc0-26dc-5228-a833-75cd474edd7d
+
+	measure 'Watch Revenue' = IF ( [Watch List Flag] = 1, [Revenue] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 6 Products
+		lineageTag: a23b959d-2d9d-54a7-b52d-15ba5ce0041c
+
+	measure 'Watch Profit' = IF ( [Watch List Flag] = 1, [Profit] )
+		formatString: \$#,0;-\$#,0;\$#,0
+		displayFolder: 6 Products
+		lineageTag: acb08c2b-588e-5816-8541-c31b5d26c06f
+
+	measure 'Watch Margin' = IF ( [Watch List Flag] = 1, [Profit Margin %] )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 6 Products
+		lineageTag: f3c6c124-1c9c-5349-bf97-6a11013489fe
+
+	measure 'Watch Lines' = IF ( [Watch List Flag] = 1, [Valid Items] )
+		formatString: #,0
+		displayFolder: 6 Products
+		lineageTag: ee9c1200-1958-550b-ae4a-b98f69f017c6
+
+	measure 'Watch Font Color' = IF ( [Profit] < 0, "#D03B3B", "#111110" )
+		displayFolder: 6 Products
+		lineageTag: 1abf648f-d9b0-5b21-ac76-8f1a26883c25
+
+	measure 'Alert 1' =
+			"First Class late on "
+			    & FORMAT ( CALCULATE ( [Late Rate %], dim_shipping[shipping_mode] = "First Class" ), "0%" )
+			    & " of items: promises 1 day, always takes 2"
+		displayFolder: 7 Text
+		lineageTag: 0f2f2dff-959d-5c26-893d-e32c78be9955
+
+	measure 'Alert 2' =
+			FORMAT ( [Discount Above 10% per Year], "$#,0" ) & " a year discounted above 10%; those items sell "
+			    & FORMAT ( [Units above 10%], "0.00" ) & " units per line vs " & FORMAT ( [Units at or below 10%], "0.00" )
+		displayFolder: 7 Text
+		lineageTag: f59a96f9-0fbd-55e3-8ab1-4ac1af3cb268
+
+	measure 'Alert 3' = FORMAT ( [Loss-making Line Share], "0.0%" ) & " of order lines lose money, spread evenly across products"
+		displayFolder: 7 Text
+		lineageTag: 54f3c1ec-3d35-594b-a192-bc5fc32c8a5a
+
+	measure 'Takeaway Summary' =
+			FORMAT ( [Late Rate %], "0%" ) & " of items arrive late, and discounts above 10% cost "
+			    & FORMAT ( [Discount Above 10% per Year], "$#,0" ) & " a year without selling more units."
+		displayFolder: 7 Text
+		lineageTag: 6383af67-4f1c-5895-becc-a62a68f5b1b8
+
+	measure 'Takeaway Delivery' =
+			"First Class is late on "
+			    & FORMAT ( CALCULATE ( [Late Rate %], dim_shipping[shipping_mode] = "First Class" ), "0%" )
+			    & " of items: it always ships in 2 days against a 1-day promise. Fix the promise per mode, not per region."
+		displayFolder: 7 Text
+		lineageTag: 3f7e7003-053c-5c60-beb9-d505849d813b
+
+	measure 'Takeaway Discounts' =
+			"Items discounted above 10% sell " & FORMAT ( [Units above 10%], "0.00" ) & " units per line vs "
+			    & FORMAT ( [Units at or below 10%], "0.00" ) & " at or below: the extra discount buys no volume."
+		displayFolder: 7 Text
+		lineageTag: ab779765-d2e5-5a97-b527-84597a289e24
+
+	measure 'Takeaway Customers' =
+			"About " & FORMAT ( [Month-3 Retention], "0%" )
+			    & " of a cohort orders again in any month, and RFM segments reorder at the same rate: test retention, don't target it."
+		displayFolder: 7 Text
+		lineageTag: 57d5bbd0-24d8-5998-a577-b879d934841e
+
+	measure 'Takeaway Products' =
+			FORMAT ( [A-class Products], "0" ) & " products earn 80% of profit, the same products that earn the revenue; only "
+			    & FORMAT ( [Loss-making Products], "0" ) & " small products lose money."
+		displayFolder: 7 Text
+		lineageTag: 675c8f0d-caa4-5d97-9eec-6ca3cd5793f5
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6cdb87cd-a0e8-507d-a7ff-450968675f28
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW ( "Value", 1 )

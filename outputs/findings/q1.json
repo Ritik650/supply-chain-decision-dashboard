@@ -1,0 +1,62 @@
+{
+  "overall_late_rate": 0.5728070388644484,
+  "valid_items": 164572,
+  "late_rate_by_mode": {
+    "Same Day": 0.47712122923963396,
+    "First Class": 1.0,
+    "Second Class": 0.7980613893376414,
+    "Standard Class": 0.39777942867610394
+  },
+  "late_ci_by_mode": {
+    "Same Day": [
+      0.4667276244807992,
+      0.4875346855304833
+    ],
+    "First Class": [
+      0.9998480009465598,
+      1.0
+    ],
+    "Second Class": [
+      0.7936402580886779,
+      0.8024113825232715
+    ],
+    "Standard Class": [
+      0.39472321014879397,
+      0.4008436395341006
+    ]
+  },
+  "items_by_mode": {
+    "Same Day": 8851,
+    "First Class": 25270,
+    "Second Class": 32188,
+    "Standard Class": 98263
+  },
+  "promised_days_by_mode": {
+    "Same Day": 0,
+    "First Class": 1,
+    "Second Class": 2,
+    "Standard Class": 4
+  },
+  "avg_actual_days_by_mode": {
+    "Same Day": 0.47712122923963396,
+    "First Class": 2.0,
+    "Second Class": 3.9921088604448864,
+    "Standard Class": 3.9938735841568036
+  },
+  "second_vs_standard_actual_days_p": 0.8460540656311245,
+  "cramers_v_mode": 0.4814917987869158,
+  "cramers_v_next_best": 0.0215106589773328,
+  "next_best_factor": "Order region",
+  "pseudo_r2_full": 0.08497707759787165,
+  "pseudo_r2_mode_only": 0.08481708496237139,
+  "reorder_90d_after_late": 0.3283089290841229,
+  "reorder_90d_after_on_time": 0.3275009509319133,
+  "reorder_diff_ci": [
+    -0.01600059089067306,
+    0.017616547195092303
+  ],
+  "reorder_p_value": 0.9249441508384671,
+  "late_rate_current": 0.5728070388644484,
+  "late_rate_first_class_2d": 0.4192572248013028,
+  "late_rate_first2_second4": 0.34103006586782686
+}

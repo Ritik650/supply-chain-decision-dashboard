@@ -1,0 +1,90 @@
+# 10 fresh questions, written before any model run and held back. They are scored only
+# once, after the single prompt iteration, so the final accuracy is not tuned on.
+
+- id: F01
+  difficulty: easy
+  question: How many customers are based in Puerto Rico?
+  gold: SELECT count(*) AS customers FROM dim_customer WHERE country = 'Puerto Rico'
+
+- id: F02
+  difficulty: easy
+  question: How many order items, across all statuses, had a discount rate above 20%?
+  gold: SELECT count(*) AS order_items FROM fact_order_items WHERE discount_rate > 0.20
+
+- id: F03
+  difficulty: easy
+  question: What is the date of the earliest order?
+  gold: SELECT min(order_date) AS first_order_date FROM fact_order_items
+
+- id: F04
+  difficulty: medium
+  question: What was revenue in each quarter of 2016?
+  gold: |
+    SELECT d.quarter, sum(f.item_total) AS revenue
+    FROM fact_order_items f JOIN dim_date d ON d.date_key = f.order_date_key
+    WHERE f.is_valid_order AND d.year = 2016
+    GROUP BY d.quarter
+
+- id: F05
+  difficulty: medium
+  question: Which 3 order countries had the most orders?
+  gold: |
+    SELECT g.order_country, count(DISTINCT f.order_id) AS orders
+    FROM fact_order_items f JOIN dim_geography g ON g.geo_key = f.geo_key
+    WHERE f.is_valid_order
+    GROUP BY g.order_country
+    ORDER BY orders DESC
+    LIMIT 3
+
+- id: F06
+  difficulty: medium
+  question: What is the average quantity per order item in each department?
+  gold: |
+    SELECT p.department_name, avg(f.quantity) AS avg_quantity
+    FROM fact_order_items f JOIN dim_product p ON p.product_key = f.product_key
+    WHERE f.is_valid_order
+    GROUP BY p.department_name
+
+- id: F07
+  difficulty: medium
+  question: What is the late-delivery rate for orders placed on weekends versus weekdays?
+  gold: |
+    SELECT d.is_weekend, avg(f.is_late::INT) AS late_rate
+    FROM fact_order_items f JOIN dim_date d ON d.date_key = f.order_date_key
+    WHERE f.is_valid_order
+    GROUP BY d.is_weekend
+
+- id: F08
+  difficulty: hard
+  question: Which month of 2016 had the highest profit margin?
+  gold: |
+    SELECT date_trunc('month', order_date) AS month
+    FROM fact_order_items
+    WHERE is_valid_order AND order_date >= DATE '2016-01-01' AND order_date < DATE '2017-01-01'
+    GROUP BY 1
+    ORDER BY sum(profit) / sum(item_total) DESC
+    LIMIT 1
+
+- id: F09
+  difficulty: hard
+  question: In each market, what share of revenue came from First Class shipments?
+  gold: |
+    SELECT g.market,
+           sum(f.item_total) FILTER (WHERE s.shipping_mode = 'First Class') / sum(f.item_total) AS first_class_revenue_share
+    FROM fact_order_items f
+    JOIN dim_geography g ON g.geo_key = f.geo_key
+    JOIN dim_shipping s ON s.shipping_key = f.shipping_key
+    WHERE f.is_valid_order
+    GROUP BY g.market
+
+- id: F10
+  difficulty: hard
+  question: How many customers placed more than 5 valid orders, and what share of total revenue do they account for?
+  gold: |
+    WITH c AS (
+        SELECT customer_key, count(DISTINCT order_id) AS orders, sum(item_total) AS revenue
+        FROM fact_order_items WHERE is_valid_order GROUP BY 1
+    )
+    SELECT count(*) FILTER (WHERE orders > 5) AS customers,
+           sum(revenue) FILTER (WHERE orders > 5) / sum(revenue) AS revenue_share
+    FROM c

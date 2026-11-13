@@ -1,0 +1,23 @@
+duckdb>=1.1
+pandas>=2.2
+numpy>=1.26
+scipy>=1.13
+statsmodels>=0.14
+matplotlib>=3.8
+pyyaml>=6.0
+requests>=2.31
+tabulate>=0.9
+nbformat>=5.10
+nbconvert>=7.16
+ipykernel>=6.29
+reportlab>=4.0
+pypdf>=4.0
+pytest>=8.0
+# Power BI project validation (scripts/validate_pbip.py)
+jsonschema>=4.18
+referencing>=0.30
+# dashboard check, screenshots and demo GIF (also: playwright install chromium; ffmpeg on PATH)
+playwright>=1.45
+# text-to-SQL: Gemini by default, or any OpenAI-compatible endpoint
+google-genai>=1.0
+openai>=1.40

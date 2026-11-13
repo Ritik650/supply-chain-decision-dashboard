@@ -1,0 +1,65 @@
+/// Delivery destination: market > region > country > state > city.
+table dim_geography
+	lineageTag: 49e90d82-bddd-5ffd-b419-89bc9ac5dc30
+
+	column geo_key
+		dataType: int64
+		isHidden
+		lineageTag: 3b636d8c-8e9a-5f7f-9b58-3ae65b3974e8
+		summarizeBy: none
+		sourceColumn: geo_key
+
+		annotation SummarizationSetBy = User
+
+	column market
+		dataType: string
+		lineageTag: 12bb3a27-f4b6-57a7-a99e-fd1544ba227e
+		summarizeBy: none
+		sourceColumn: market
+
+		annotation SummarizationSetBy = User
+
+	column order_region
+		dataType: string
+		lineageTag: ffb1c579-91ac-50a2-b8e1-de89ea2d5cf1
+		summarizeBy: none
+		sourceColumn: order_region
+
+		annotation SummarizationSetBy = User
+
+	column order_country
+		dataType: string
+		lineageTag: 787b3714-6e53-542a-ab92-b4a5fc5efbce
+		summarizeBy: none
+		sourceColumn: order_country
+
+		annotation SummarizationSetBy = User
+
+	column order_state
+		dataType: string
+		lineageTag: 0b55935f-ea52-520d-930c-1464fbde8978
+		summarizeBy: none
+		sourceColumn: order_state
+
+		annotation SummarizationSetBy = User
+
+	column order_city
+		dataType: string
+		lineageTag: 466150c2-0518-5999-bb13-0d1b82e98b46
+		summarizeBy: none
+		sourceColumn: order_city
+
+		annotation SummarizationSetBy = User
+
+	partition dim_geography = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_geography.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"geo_key", "market", "order_region", "order_country", "order_state", "order_city"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"geo_key", Int64.Type}, {"market", type text}, {"order_region", type text}, {"order_country", type text}, {"order_state", type text}, {"order_city", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

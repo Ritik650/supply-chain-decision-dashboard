@@ -1,0 +1,91 @@
+/// RFM scores per customer as of 2017-10-01 (sql/analysis/p4_rfm_segments.sql).
+table rfm_segments
+	lineageTag: 7ab97215-8af0-55f8-9db0-a9ac70bc4cc0
+
+	column customer_key
+		dataType: int64
+		isHidden
+		lineageTag: 0e537389-003e-559d-84a7-2dea3a7e1b05
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = User
+
+	column last_order_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 3a638c5f-289d-55af-b304-94348c6098b7
+		summarizeBy: none
+		sourceColumn: last_order_date
+
+		annotation SummarizationSetBy = User
+
+	column frequency
+		dataType: int64
+		lineageTag: 86617e5e-281b-5a28-9362-b08cc5cceccc
+		summarizeBy: sum
+		sourceColumn: frequency
+
+		annotation SummarizationSetBy = User
+
+	column monetary
+		dataType: decimal
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 131ec1aa-c3c2-5689-bded-a3ac06cdb490
+		summarizeBy: sum
+		sourceColumn: monetary
+
+		annotation SummarizationSetBy = User
+
+	column recency_days
+		dataType: int64
+		lineageTag: 58cabd9b-59c6-5dde-bdbf-f427e0cf370e
+		summarizeBy: sum
+		sourceColumn: recency_days
+
+		annotation SummarizationSetBy = User
+
+	column r_score
+		dataType: int64
+		lineageTag: 3627399f-a924-5bc7-bd8c-f0b636039397
+		summarizeBy: none
+		sourceColumn: r_score
+
+		annotation SummarizationSetBy = User
+
+	column f_score
+		dataType: int64
+		lineageTag: 3c0f4ce6-d5b1-5198-8873-7afd555db7e8
+		summarizeBy: none
+		sourceColumn: f_score
+
+		annotation SummarizationSetBy = User
+
+	column m_score
+		dataType: int64
+		lineageTag: 4bf12016-258f-545e-bc5f-7cc2ba87035e
+		summarizeBy: none
+		sourceColumn: m_score
+
+		annotation SummarizationSetBy = User
+
+	column rfm_segment
+		dataType: string
+		lineageTag: 671678d4-47a2-5383-bd7e-4dbff4873e37
+		summarizeBy: none
+		sourceColumn: rfm_segment
+
+		annotation SummarizationSetBy = User
+
+	partition rfm_segments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "rfm_segments.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"customer_key", "last_order_date", "frequency", "monetary", "recency_days", "r_score", "f_score", "m_score", "rfm_segment"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"customer_key", Int64.Type}, {"last_order_date", type date}, {"frequency", Int64.Type}, {"monetary", Currency.Type}, {"recency_days", Int64.Type}, {"r_score", Int64.Type}, {"f_score", Int64.Type}, {"m_score", Int64.Type}, {"rfm_segment", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

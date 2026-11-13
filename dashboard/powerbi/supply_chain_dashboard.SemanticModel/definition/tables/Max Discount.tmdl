@@ -1,0 +1,22 @@
+/// What-if parameter (0 to 0.25, step 0.01); default 0.1 when nothing is selected
+table 'Max Discount'
+	lineageTag: 8ecc81d2-d187-5ae0-acaf-641d4a9f915b
+
+	measure 'Max Discount Value' = SELECTEDVALUE ( 'Max Discount'[Max Discount], 0.1 )
+		formatString: 0%;-0%;0%
+		lineageTag: 372fad6b-6260-5da5-8850-002ddabb97d5
+
+	column 'Max Discount'
+		dataType: double
+		formatString: 0%;-0%;0%
+		lineageTag: f7d5a566-89ce-5f17-8130-4a21140224e0
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Max Discount' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.25, 0.01 )
+
+	annotation PBI_Id = 39a4f1dd06e35eafa81cde978ab75663

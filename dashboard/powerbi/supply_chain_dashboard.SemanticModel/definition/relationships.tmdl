@@ -1,0 +1,30 @@
+relationship f805f0b6-5051-537a-8947-4f447d997cf3
+	fromColumn: fact_order_items.order_date_key
+	toColumn: dim_date.date_key
+
+relationship 61fcd578-eaab-59cb-80e9-82f154a83395
+	isActive: false
+	fromColumn: fact_order_items.ship_date_key
+	toColumn: dim_date.date_key
+
+relationship 7da9a38e-cadd-59e5-a999-00ac15e75fea
+	fromColumn: fact_order_items.customer_key
+	toColumn: dim_customer.customer_key
+
+relationship 3923ba87-23df-5447-b9c3-351006713309
+	fromColumn: fact_order_items.product_key
+	toColumn: dim_product.product_key
+
+relationship 17265fff-a311-5eba-8e8d-809501afe7a3
+	fromColumn: fact_order_items.geo_key
+	toColumn: dim_geography.geo_key
+
+relationship 94c7702c-6324-5189-901e-f6c6ff0d86cf
+	fromColumn: fact_order_items.shipping_key
+	toColumn: dim_shipping.shipping_key
+
+relationship c053d00b-0888-5844-b576-78b56a9e8aa3
+	fromCardinality: one
+	crossFilteringBehavior: bothDirections
+	fromColumn: rfm_segments.customer_key
+	toColumn: dim_customer.customer_key

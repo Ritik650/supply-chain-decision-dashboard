@@ -1,0 +1,22 @@
+/// What-if parameter (1 to 2, step 1); default 2 when nothing is selected
+table 'First Class Promise'
+	lineageTag: ae069447-b039-532b-ac40-adc99aec6faf
+
+	measure 'First Class Promise Value' = SELECTEDVALUE ( 'First Class Promise'[First Class Promise], 2 )
+		formatString: 0
+		lineageTag: f73ca6b5-018d-56e6-84cd-7254b63abff2
+
+	column 'First Class Promise'
+		dataType: int64
+		formatString: 0
+		lineageTag: 667971ca-e17f-5781-8bd3-ef12cdba8cd6
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'First Class Promise' = calculated
+		mode: import
+		source = GENERATESERIES ( 1, 2, 1 )
+
+	annotation PBI_Id = 864142f1d2c259309c182f4924e9ac8e

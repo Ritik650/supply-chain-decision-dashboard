@@ -1,0 +1,5 @@
+/// Folder holding the CSVs from `python scripts/build.py --export`. Change it in Transform data > Edit parameters.
+expression DataFolder = "C:\Users\ry981\Downloads\supply-chain\data\export\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 35ad69fc-2363-5b3d-a403-9fa53ac0c8ae
+
+	annotation PBI_ResultType = Text

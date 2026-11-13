@@ -1,0 +1,49 @@
+/// Shipping mode x payment type; promised_days is fixed per mode.
+table dim_shipping
+	lineageTag: a189ad2f-23ee-59ed-973f-1247ac716463
+
+	column shipping_key
+		dataType: int64
+		isHidden
+		lineageTag: 7b8b859a-678d-50e5-82be-90b9c15e34ba
+		summarizeBy: none
+		sourceColumn: shipping_key
+
+		annotation SummarizationSetBy = User
+
+	column shipping_mode
+		dataType: string
+		lineageTag: 70cd2033-7a35-59b2-bcd0-35d8bb91de45
+		summarizeBy: none
+		sourceColumn: shipping_mode
+
+		annotation SummarizationSetBy = User
+
+	column promised_days
+		dataType: int64
+		lineageTag: b3c98be0-470e-53d0-8ef7-1112f84ff6d4
+		summarizeBy: none
+		sourceColumn: promised_days
+
+		annotation SummarizationSetBy = User
+
+	column payment_type
+		dataType: string
+		lineageTag: 7bf6bb08-ef3d-5f16-ad9c-61e4af9d0633
+		summarizeBy: none
+		sourceColumn: payment_type
+
+		annotation SummarizationSetBy = User
+
+	partition dim_shipping = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_shipping.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"shipping_key", "shipping_mode", "promised_days", "payment_type"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"shipping_key", Int64.Type}, {"shipping_mode", type text}, {"promised_days", Int64.Type}, {"payment_type", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

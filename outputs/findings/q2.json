@@ -1,0 +1,297 @@
+{
+  "overall_margin": 0.11980642614981003,
+  "discount_spend_window": 3324544.6000000006,
+  "items": 164572,
+  "rates_items_min": 9096,
+  "rates_items_max": 9182,
+  "margin_by_band": {
+    "0-5%": 0.1184865465067758,
+    "5-10%": 0.12396371279606898,
+    "10-15%": 0.1192178254315085,
+    "15-20%": 0.11757277945013277,
+    "20-25%": 0.11978724375665215
+  },
+  "margin_ci_by_band": {
+    "0-5%": [
+      0.11354850775817707,
+      0.12375258317389586
+    ],
+    "5-10%": [
+      0.11800008614141394,
+      0.12936773182230274
+    ],
+    "10-15%": [
+      0.11355293589699839,
+      0.12536342100448652
+    ],
+    "15-20%": [
+      0.11209944080018926,
+      0.12317294483058149
+    ],
+    "20-25%": [
+      0.1124384779955472,
+      0.12686287529361798
+    ]
+  },
+  "qty_by_band": {
+    "0-5%": 2.184161056221037,
+    "5-10%": 2.181790848958618,
+    "10-15%": 2.1832236842105264,
+    "15-20%": 2.179867716191101,
+    "20-25%": 2.1831055221432476
+  },
+  "profit_per_gross_by_band": {
+    "0-5%": 0.11612107669340292,
+    "5-10%": 0.11575039137187976,
+    "10-15%": 0.10531147769392417,
+    "15-20%": 0.09817367034415712,
+    "20-25%": 0.09284182563831019
+  },
+  "margin_at_or_below_10": 0.12097657521082471,
+  "margin_above_10": 0.1181261832779842,
+  "margin_diff_pts": -0.28428439895746943,
+  "margin_diff_ci_pts": [
+    -0.8080388923896356,
+    0.2394700944746967
+  ],
+  "margin_diff_p": 0.28740447212178344,
+  "qty_at_or_below_10": 2.1828001661819694,
+  "qty_above_10": 2.181913933192898,
+  "qty_test_p": 0.9648266966087631,
+  "elasticity_beta": -0.006204108057740582,
+  "elasticity_ci": [
+    -0.05682646378809142,
+    0.04441824767261025
+  ],
+  "elasticity_p": 0.810170030083028,
+  "categories_tested": 14,
+  "categories_significant_holm": 1,
+  "significant_categories": [
+    {
+      "category_name": "Women's Apparel",
+      "margin_at_or_below_10": 0.1334361878416666,
+      "margin_above_10": 0.10948402019508433,
+      "margin_gap_pts": -2.3952167646582283,
+      "p_holm": 0.01674500913286578,
+      "discount_above_10_cap": 93390.5
+    }
+  ],
+  "cap": 0.1,
+  "cap10_items_above": 73106,
+  "cap10_share_items": 0.4442189436842233,
+  "cap10_discount_above_cap_window": 1020440.0543998822,
+  "cap10_high_per_year": 371069.11069086625,
+  "cap10_central_per_year": 371069.1106909092,
+  "cap10_low_per_year": 239900.71294001729,
+  "cap10_breakeven_volume_loss": 0.41663578395519757,
+  "whatif_by_cap": [
+    {
+      "cap": 0.0,
+      "items_above_cap": 155390,
+      "low_per_year": 659501.6412165437,
+      "central_per_year": 1208865.0902545457,
+      "high_per_year": 1208865.0902545352,
+      "breakeven_volume_loss": 0.5020888227839235
+    },
+    {
+      "cap": 0.01,
+      "items_above_cap": 146225,
+      "low_per_year": 608088.2062524828,
+      "central_per_year": 1096287.925709091,
+      "high_per_year": 1096287.9257089556,
+      "breakeven_volume_loss": 0.49451021031384534
+    },
+    {
+      "cap": 0.02,
+      "items_above_cap": 137073,
+      "low_per_year": 558420.4167780291,
+      "central_per_year": 990346.854327273,
+      "high_per_year": 990346.8543272621,
+      "breakeven_volume_loss": 0.48664207143976995
+    },
+    {
+      "cap": 0.03,
+      "items_above_cap": 127971,
+      "low_per_year": 510719.76219678536,
+      "central_per_year": 891038.7202909094,
+      "high_per_year": 891038.7202907895,
+      "breakeven_volume_loss": 0.4778091182273168
+    },
+    {
+      "cap": 0.04,
+      "items_above_cap": 118824,
+      "low_per_year": 465208.93222440185,
+      "central_per_year": 798317.4598909091,
+      "high_per_year": 798317.4598909024,
+      "breakeven_volume_loss": 0.4703431506092027
+    },
+    {
+      "cap": 0.05,
+      "items_above_cap": 109669,
+      "low_per_year": 422047.9492486765,
+      "central_per_year": 712210.2681818182,
+      "high_per_year": 712210.2681817744,
+      "breakeven_volume_loss": 0.4651568638216182
+    },
+    {
+      "cap": 0.06,
+      "items_above_cap": 100516,
+      "low_per_year": 384091.7564300497,
+      "central_per_year": 636035.7231272731,
+      "high_per_year": 636035.7231272411,
+      "breakeven_volume_loss": 0.4612107144526642
+    },
+    {
+      "cap": 0.07,
+      "items_above_cap": 91377,
+      "low_per_year": 346246.73108116613,
+      "central_per_year": 563173.4749090911,
+      "high_per_year": 563173.4749090434,
+      "breakeven_volume_loss": 0.45803222767875784
+    },
+    {
+      "cap": 0.08,
+      "items_above_cap": 91377,
+      "low_per_year": 311319.5668519352,
+      "central_per_year": 496931.0801454546,
+      "high_per_year": 496931.08014544286,
+      "breakeven_volume_loss": 0.4271708747801735
+    },
+    {
+      "cap": 0.09,
+      "items_above_cap": 82238,
+      "low_per_year": 274033.3846397171,
+      "central_per_year": 430688.68538181804,
+      "high_per_year": 430688.68538180436,
+      "breakeven_volume_loss": 0.4209707479121688
+    },
+    {
+      "cap": 0.1,
+      "items_above_cap": 73106,
+      "low_per_year": 239900.71294001729,
+      "central_per_year": 371069.1106909092,
+      "high_per_year": 371069.11069086625,
+      "breakeven_volume_loss": 0.41663578395519757
+    },
+    {
+      "cap": 0.11,
+      "items_above_cap": 73106,
+      "low_per_year": 209149.46766500286,
+      "central_per_year": 318075.1051636364,
+      "high_per_year": 318075.1051636209,
+      "breakeven_volume_loss": 0.379728657968224
+    },
+    {
+      "cap": 0.12,
+      "items_above_cap": 63974,
+      "low_per_year": 176478.3914401285,
+      "central_per_year": 265081.09963636374,
+      "high_per_year": 265081.09963634127,
+      "breakeven_volume_loss": 0.3701913844599003
+    },
+    {
+      "cap": 0.13,
+      "items_above_cap": 54878,
+      "low_per_year": 147454.33703936145,
+      "central_per_year": 218710.01389090903,
+      "high_per_year": 218710.01389090784,
+      "breakeven_volume_loss": 0.3631871435239115
+    },
+    {
+      "cap": 0.14,
+      "items_above_cap": 54878,
+      "low_per_year": 122274.88685872576,
+      "central_per_year": 178927.73130909092,
+      "high_per_year": 178927.73130908742,
+      "breakeven_volume_loss": 0.3181422819093724
+    },
+    {
+      "cap": 0.15,
+      "items_above_cap": 45726,
+      "low_per_year": 95628.58719351972,
+      "central_per_year": 139145.4487272729,
+      "high_per_year": 139145.44872728153,
+      "breakeven_volume_loss": 0.3038767462079807
+    },
+    {
+      "cap": 0.16,
+      "items_above_cap": 36591,
+      "low_per_year": 73127.56963860913,
+      "central_per_year": 106000.47967272726,
+      "high_per_year": 106000.47967272997,
+      "breakeven_volume_loss": 0.29742099956785417
+    },
+    {
+      "cap": 0.17,
+      "items_above_cap": 27436,
+      "low_per_year": 54920.494996996684,
+      "central_per_year": 79484.33727272727,
+      "high_per_year": 79484.33727272885,
+      "breakeven_volume_loss": 0.29512021349163975
+    },
+    {
+      "cap": 0.18,
+      "items_above_cap": 18290,
+      "low_per_year": 41376.17842345454,
+      "central_per_year": 59601.27410909093,
+      "high_per_year": 59601.27410909178,
+      "breakeven_volume_loss": 0.32618315447575996
+    },
+    {
+      "cap": 0.19,
+      "items_above_cap": 18290,
+      "low_per_year": 32597.93769540911,
+      "central_per_year": 46339.78760000003,
+      "high_per_year": 46339.78760000259,
+      "breakeven_volume_loss": 0.2734526252315936
+    },
+    {
+      "cap": 0.2,
+      "items_above_cap": 9117,
+      "low_per_year": 23305.852072727273,
+      "central_per_year": 33078.301090909095,
+      "high_per_year": 33078.30109090989,
+      "breakeven_volume_loss": 0.3384852766114889
+    },
+    {
+      "cap": 0.21,
+      "items_above_cap": 9117,
+      "low_per_year": 19173.934475636364,
+      "central_per_year": 26462.640872727276,
+      "high_per_year": 26462.64087272661,
+      "breakeven_volume_loss": 0.29045089134925883
+    },
+    {
+      "cap": 0.22,
+      "items_above_cap": 9117,
+      "low_per_year": 14777.390469818185,
+      "central_per_year": 19846.980654545456,
+      "high_per_year": 19846.980654546216,
+      "breakeven_volume_loss": 0.23489449755924138
+    },
+    {
+      "cap": 0.23,
+      "items_above_cap": 9117,
+      "low_per_year": 10116.220055272719,
+      "central_per_year": 13231.320436363638,
+      "high_per_year": 13231.320436363305,
+      "breakeven_volume_loss": 0.16989912128262888
+    },
+    {
+      "cap": 0.24,
+      "items_above_cap": 9117,
+      "low_per_year": 5190.423232000015,
+      "central_per_year": 6615.66021818183,
+      "high_per_year": 6615.660218181652,
+      "breakeven_volume_loss": 0.09283593230210586
+    },
+    {
+      "cap": 0.25,
+      "items_above_cap": 0,
+      "low_per_year": 0.0,
+      "central_per_year": 0.0,
+      "high_per_year": 0.0,
+      "breakeven_volume_loss": 0.0
+    }
+  ]
+}

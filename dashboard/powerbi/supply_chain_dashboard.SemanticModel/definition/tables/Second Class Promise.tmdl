@@ -1,0 +1,22 @@
+/// What-if parameter (2 to 6, step 1); default 4 when nothing is selected
+table 'Second Class Promise'
+	lineageTag: 8c9900a6-da39-5fc2-8deb-be3d5ae840f7
+
+	measure 'Second Class Promise Value' = SELECTEDVALUE ( 'Second Class Promise'[Second Class Promise], 4 )
+		formatString: 0
+		lineageTag: 12ba46df-e4bb-5a59-81fa-17c706cbbe05
+
+	column 'Second Class Promise'
+		dataType: int64
+		formatString: 0
+		lineageTag: 282384f3-3fad-5766-8b66-f0f8857343c9
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Second Class Promise' = calculated
+		mode: import
+		source = GENERATESERIES ( 2, 6, 1 )
+
+	annotation PBI_Id = c5aba86b7260534b93cab3be223321e9

@@ -1,0 +1,449 @@
+{
+ "p1_kpi_cards": [
+  {
+   "period": "window",
+   "revenue": 29463744.17001283,
+   "profit": 3529945.8899999936,
+   "profit_margin": 0.1198064261497576,
+   "late_rate": 0.5728070388644484,
+   "orders": 54854,
+   "avg_order_value": 537.1302761879322,
+   "order_items": 164572
+  },
+  {
+   "period": "2017-09",
+   "revenue": 976907.9099999683,
+   "profit": 117988.15999999976,
+   "profit_margin": 0.12077715697890458,
+   "late_rate": 0.570675319407828,
+   "orders": 1640,
+   "avg_order_value": 595.6755548780294,
+   "order_items": 4931
+  },
+  {
+   "period": "2017-08",
+   "revenue": 958772.369999968,
+   "profit": 126668.1100000001,
+   "profit_margin": 0.13211489396592055,
+   "late_rate": 0.58579534337703,
+   "orders": 1695,
+   "avg_order_value": 565.6474159291846,
+   "order_items": 5111
+  }
+ ],
+ "p2_late_by_mode": [
+  {
+   "shipping_mode": "Same Day",
+   "promised_days": 0,
+   "order_items": 8851,
+   "late_rate": 0.47712122923963396,
+   "on_time_rate": 0.522878770760366,
+   "avg_delay_days_late_items": 1.0,
+   "avg_actual_days": 0.47712122923963396,
+   "min_actual_days": 0,
+   "max_actual_days": 1
+  },
+  {
+   "shipping_mode": "First Class",
+   "promised_days": 1,
+   "order_items": 25270,
+   "late_rate": 1.0,
+   "on_time_rate": 0.0,
+   "avg_delay_days_late_items": 1.0,
+   "avg_actual_days": 2.0,
+   "min_actual_days": 2,
+   "max_actual_days": 2
+  },
+  {
+   "shipping_mode": "Second Class",
+   "promised_days": 2,
+   "order_items": 32188,
+   "late_rate": 0.7980613893376414,
+   "on_time_rate": 0.20193861066235863,
+   "avg_delay_days_late_items": 2.496184989099969,
+   "avg_actual_days": 3.9921088604448864,
+   "min_actual_days": 2,
+   "max_actual_days": 6
+  },
+  {
+   "shipping_mode": "Standard Class",
+   "promised_days": 4,
+   "order_items": 98263,
+   "late_rate": 0.39777942867610394,
+   "on_time_rate": 0.6022205713238961,
+   "avg_delay_days_late_items": 1.5069204594878092,
+   "avg_actual_days": 3.9938735841568036,
+   "min_actual_days": 2,
+   "max_actual_days": 6
+  }
+ ],
+ "p3_margin_by_band": [
+  {
+   "discount_band": "0-5%",
+   "min_rate": 0.0,
+   "max_rate": 0.04,
+   "order_items": 45748,
+   "gross_sales": 9108771.380002946,
+   "discount_spend": 181847.86,
+   "revenue": 8926923.530001853,
+   "profit": 1057720.3399999957,
+   "profit_margin": 0.1184865465067758,
+   "profit_per_gross_sales": 0.11612107669340292,
+   "avg_quantity": 2.184161056221037
+  },
+  {
+   "discount_band": "5-10%",
+   "min_rate": 0.05,
+   "max_rate": 0.09,
+   "order_items": 36586,
+   "gross_sales": 7284094.680001475,
+   "discount_spend": 482616.3200000012,
+   "revenue": 6801480.780000764,
+   "profit": 843136.809999998,
+   "profit_margin": 0.12396371279606898,
+   "profit_per_gross_sales": 0.11575039137187976,
+   "avg_quantity": 2.181790848958618
+  },
+  {
+   "discount_band": "10-15%",
+   "min_rate": 0.1,
+   "max_rate": 0.13,
+   "order_items": 27360,
+   "gross_sales": 5455255.330000435,
+   "discount_spend": 636342.9899999835,
+   "revenue": 4818918.630000148,
+   "profit": 574501.0000000017,
+   "profit_margin": 0.1192178254315085,
+   "profit_per_gross_sales": 0.10531147769392417,
+   "avg_quantity": 2.1832236842105264
+  },
+  {
+   "discount_band": "15-20%",
+   "min_rate": 0.15,
+   "max_rate": 0.18,
+   "order_items": 36588,
+   "gross_sales": 7293218.920001466,
+   "discount_spend": 1203358.4099999608,
+   "revenue": 6089862.580000315,
+   "profit": 716002.0699999935,
+   "profit_margin": 0.11757277945013277,
+   "profit_per_gross_sales": 0.09817367034415712,
+   "avg_quantity": 2.179867716191101
+  },
+  {
+   "discount_band": "20-25%",
+   "min_rate": 0.2,
+   "max_rate": 0.25,
+   "order_items": 18290,
+   "gross_sales": 3646908.7899999814,
+   "discount_spend": 820379.0199999711,
+   "revenue": 2826558.649999795,
+   "profit": 338585.66999999905,
+   "profit_margin": 0.11978724375665215,
+   "profit_per_gross_sales": 0.09284182563831019,
+   "avg_quantity": 2.1831055221432476
+  }
+ ],
+ "p3_whatif_cap": [
+  {
+   "cap": 0.0,
+   "items_above_cap": 155390,
+   "profit_recovered_window": 3324378.998199972,
+   "profit_recovered_per_year": 1208865.0902545352,
+   "current_profit_affected_items": 3296718.400000047,
+   "breakeven_volume_loss": 0.5020888227839235
+  },
+  {
+   "cap": 0.01,
+   "items_above_cap": 146225,
+   "profit_recovered_window": 3014791.795699628,
+   "profit_recovered_per_year": 1096287.9257089556,
+   "current_profit_affected_items": 3081729.030000037,
+   "breakeven_volume_loss": 0.49451021031384534
+  },
+  {
+   "cap": 0.02,
+   "items_above_cap": 137073,
+   "profit_recovered_window": 2723453.849399971,
+   "profit_recovered_per_year": 990346.8543272621,
+   "current_profit_affected_items": 2872967.0300000147,
+   "breakeven_volume_loss": 0.48664207143976995
+  },
+  {
+   "cap": 0.03,
+   "items_above_cap": 127971,
+   "profit_recovered_window": 2450356.4807996713,
+   "profit_recovered_per_year": 891038.7202907895,
+   "current_profit_affected_items": 2677960.219999992,
+   "breakeven_volume_loss": 0.4778091182273168
+  },
+  {
+   "cap": 0.04,
+   "items_above_cap": 118824,
+   "profit_recovered_window": 2195373.0146999815,
+   "profit_recovered_per_year": 798317.4598909024,
+   "current_profit_affected_items": 2472225.5499999947,
+   "breakeven_volume_loss": 0.4703431506092027
+  },
+  {
+   "cap": 0.05,
+   "items_above_cap": 109669,
+   "profit_recovered_window": 1958578.2374998797,
+   "profit_recovered_per_year": 712210.2681817744,
+   "current_profit_affected_items": 2251997.5699999896,
+   "breakeven_volume_loss": 0.4651568638216182
+  },
+  {
+   "cap": 0.06,
+   "items_above_cap": 100516,
+   "profit_recovered_window": 1749098.2385999132,
+   "profit_recovered_per_year": 636035.7231272411,
+   "current_profit_affected_items": 2043307.6699999853,
+   "breakeven_volume_loss": 0.4612107144526642
+  },
+  {
+   "cap": 0.07,
+   "items_above_cap": 91377,
+   "profit_recovered_window": 1548727.0559998695,
+   "profit_recovered_per_year": 563173.4749090434,
+   "current_profit_affected_items": 1832535.139999976,
+   "breakeven_volume_loss": 0.45803222767875784
+  },
+  {
+   "cap": 0.08,
+   "items_above_cap": 91377,
+   "profit_recovered_window": 1366560.4703999679,
+   "profit_recovered_per_year": 496931.08014544286,
+   "current_profit_affected_items": 1832535.139999976,
+   "breakeven_volume_loss": 0.4271708747801735
+  },
+  {
+   "cap": 0.09,
+   "items_above_cap": 82238,
+   "profit_recovered_window": 1184393.884799962,
+   "profit_recovered_per_year": 430688.68538180436,
+   "current_profit_affected_items": 1629088.739999982,
+   "breakeven_volume_loss": 0.4209707479121688
+  },
+  {
+   "cap": 0.1,
+   "items_above_cap": 73106,
+   "profit_recovered_window": 1020440.0543998822,
+   "profit_recovered_per_year": 371069.11069086625,
+   "current_profit_affected_items": 1428797.6099999878,
+   "breakeven_volume_loss": 0.41663578395519757
+  },
+  {
+   "cap": 0.11,
+   "items_above_cap": 73106,
+   "profit_recovered_window": 874706.5391999575,
+   "profit_recovered_per_year": 318075.1051636209,
+   "current_profit_affected_items": 1428797.6099999878,
+   "breakeven_volume_loss": 0.379728657968224
+  },
+  {
+   "cap": 0.12,
+   "items_above_cap": 63974,
+   "profit_recovered_window": 728973.0239999385,
+   "profit_recovered_per_year": 265081.09963634127,
+   "current_profit_affected_items": 1240205.7699999874,
+   "breakeven_volume_loss": 0.3701913844599003
+  },
+  {
+   "cap": 0.13,
+   "items_above_cap": 54878,
+   "profit_recovered_window": 601452.5381999966,
+   "profit_recovered_per_year": 218710.01389090784,
+   "current_profit_affected_items": 1054587.739999984,
+   "breakeven_volume_loss": 0.3631871435239115
+  },
+  {
+   "cap": 0.14,
+   "items_above_cap": 54878,
+   "profit_recovered_window": 492051.2610999904,
+   "profit_recovered_per_year": 178927.73130908742,
+   "current_profit_affected_items": 1054587.739999984,
+   "breakeven_volume_loss": 0.3181422819093724
+  },
+  {
+   "cap": 0.15,
+   "items_above_cap": 45726,
+   "profit_recovered_window": 382649.98400002427,
+   "profit_recovered_per_year": 139145.44872728153,
+   "current_profit_affected_items": 876577.6099999885,
+   "breakeven_volume_loss": 0.3038767462079807
+  },
+  {
+   "cap": 0.16,
+   "items_above_cap": 36591,
+   "profit_recovered_window": 291501.3191000074,
+   "profit_recovered_per_year": 106000.47967272997,
+   "current_profit_affected_items": 688595.3099999954,
+   "breakeven_volume_loss": 0.29742099956785417
+  },
+  {
+   "cap": 0.17,
+   "items_above_cap": 27436,
+   "profit_recovered_window": 218581.92750000433,
+   "profit_recovered_per_year": 79484.33727272885,
+   "current_profit_affected_items": 522071.93999999703,
+   "breakeven_volume_loss": 0.29512021349163975
+  },
+  {
+   "cap": 0.18,
+   "items_above_cap": 18290,
+   "profit_recovered_window": 163903.5038000024,
+   "profit_recovered_per_year": 59601.27410909178,
+   "current_profit_affected_items": 338585.669999999,
+   "breakeven_volume_loss": 0.32618315447575996
+  },
+  {
+   "cap": 0.19,
+   "items_above_cap": 18290,
+   "profit_recovered_window": 127434.41590000712,
+   "profit_recovered_per_year": 46339.78760000259,
+   "current_profit_affected_items": 338585.669999999,
+   "breakeven_volume_loss": 0.2734526252315936
+  },
+  {
+   "cap": 0.2,
+   "items_above_cap": 9117,
+   "profit_recovered_window": 90965.32800000219,
+   "profit_recovered_per_year": 33078.30109090989,
+   "current_profit_affected_items": 177777.02000000083,
+   "breakeven_volume_loss": 0.3384852766114889
+  },
+  {
+   "cap": 0.21,
+   "items_above_cap": 9117,
+   "profit_recovered_window": 72772.26239999817,
+   "profit_recovered_per_year": 26462.64087272661,
+   "current_profit_affected_items": 177777.02000000083,
+   "breakeven_volume_loss": 0.29045089134925883
+  },
+  {
+   "cap": 0.22,
+   "items_above_cap": 9117,
+   "profit_recovered_window": 54579.19680000209,
+   "profit_recovered_per_year": 19846.980654546216,
+   "current_profit_affected_items": 177777.02000000083,
+   "breakeven_volume_loss": 0.23489449755924138
+  },
+  {
+   "cap": 0.23,
+   "items_above_cap": 9117,
+   "profit_recovered_window": 36386.13119999909,
+   "profit_recovered_per_year": 13231.320436363305,
+   "current_profit_affected_items": 177777.02000000083,
+   "breakeven_volume_loss": 0.16989912128262888
+  },
+  {
+   "cap": 0.24,
+   "items_above_cap": 9117,
+   "profit_recovered_window": 18193.065599999543,
+   "profit_recovered_per_year": 6615.660218181652,
+   "current_profit_affected_items": 177777.02000000083,
+   "breakeven_volume_loss": 0.09283593230210586
+  },
+  {
+   "cap": 0.25,
+   "items_above_cap": 0,
+   "profit_recovered_window": 0.0,
+   "profit_recovered_per_year": 0.0,
+   "current_profit_affected_items": 0.0,
+   "breakeven_volume_loss": 0.0
+  }
+ ],
+ "p4_segment_summary": [
+  {
+   "rfm_segment": "Champions",
+   "customers": 2290,
+   "customer_share": 0.18623942745608327,
+   "revenue": 8781141.970000006,
+   "revenue_share": 0.2980321142939113,
+   "median_recency_days": 49.0,
+   "avg_orders": 6.824890829694323,
+   "avg_revenue": 3834.559812227077
+  },
+  {
+   "rfm_segment": "Loyal",
+   "customers": 2653,
+   "customer_share": 0.2157612231620039,
+   "revenue": 7648062.160000002,
+   "revenue_share": 0.25957536543462323,
+   "median_recency_days": 125.0,
+   "avg_orders": 5.307576328684508,
+   "avg_revenue": 2882.7976479457225
+  },
+  {
+   "rfm_segment": "At risk",
+   "customers": 1386,
+   "customer_share": 0.1127195836044242,
+   "revenue": 4610827.040000001,
+   "revenue_share": 0.15649155156236885,
+   "median_recency_days": 296.0,
+   "avg_orders": 5.83044733044733,
+   "avg_revenue": 3326.7150360750366
+  },
+  {
+   "rfm_segment": "Needs attention",
+   "customers": 1998,
+   "customer_share": 0.1624918672739102,
+   "revenue": 3573954.5799999973,
+   "revenue_share": 0.12130008186939793,
+   "median_recency_days": 213.5,
+   "avg_orders": 3.4934934934934936,
+   "avg_revenue": 1788.7660560560546
+  },
+  {
+   "rfm_segment": "Hibernating",
+   "customers": 2475,
+   "customer_share": 0.20128497072218607,
+   "revenue": 2677422.8199999994,
+   "revenue_share": 0.0908717780249447,
+   "median_recency_days": 426.0,
+   "avg_orders": 2.250909090909091,
+   "avg_revenue": 1081.7869979797977
+  },
+  {
+   "rfm_segment": "New & promising",
+   "customers": 1494,
+   "customer_share": 0.12150292778139232,
+   "revenue": 2172335.599999999,
+   "revenue_share": 0.07372910881475382,
+   "median_recency_days": 54.0,
+   "avg_orders": 3.0200803212851404,
+   "avg_revenue": 1454.0398929049527
+  }
+ ],
+ "p4_month3_retention": [
+  {
+   "cohort_customers": 12224,
+   "active_in_month_3": 1553,
+   "month3_retention": 0.12704515706806283
+  }
+ ],
+ "p5_kpis": [
+  {
+   "products": 100,
+   "top_20pct_products": 20,
+   "top_20pct_profit_share": 0.9611265004404932,
+   "top_20pct_revenue_share": 0.9609825084223147,
+   "loss_making_products": 2
+  }
+ ],
+ "p2_repromise_whatif": [
+  {
+   "scenario": "current promise",
+   "late_rate": 0.5728070388644484
+  },
+  {
+   "scenario": "First Class promised 2 days",
+   "late_rate": 0.4192572248013028
+  },
+  {
+   "scenario": "First Class 2 days + Second Class 4 days",
+   "late_rate": 0.34103006586782686
+  }
+ ]
+}

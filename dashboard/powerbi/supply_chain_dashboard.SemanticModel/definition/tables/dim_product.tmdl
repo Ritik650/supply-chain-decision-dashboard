@@ -1,0 +1,76 @@
+/// Products with category and department.
+table dim_product
+	lineageTag: b0efe739-34a8-5f82-a07d-d7694c7da0cd
+
+	column product_key
+		dataType: int64
+		isHidden
+		lineageTag: 1bf0b238-967e-5e0e-a6ff-9a3f2c2d803f
+		summarizeBy: none
+		sourceColumn: product_key
+
+		annotation SummarizationSetBy = User
+
+	column product_name
+		dataType: string
+		lineageTag: 7c9f1d1f-d5fb-5030-9e74-9f280549e972
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = User
+
+	column category_id
+		dataType: int64
+		isHidden
+		lineageTag: f0328552-499f-55cf-84e4-428472a42edd
+		summarizeBy: none
+		sourceColumn: category_id
+
+		annotation SummarizationSetBy = User
+
+	column category_name
+		dataType: string
+		lineageTag: abd91a06-eea4-5910-a048-fb2a2a04be4d
+		summarizeBy: none
+		sourceColumn: category_name
+
+		annotation SummarizationSetBy = User
+
+	column department_id
+		dataType: int64
+		isHidden
+		lineageTag: 16236fed-0bab-50d9-be14-f80ab4767a3e
+		summarizeBy: none
+		sourceColumn: department_id
+
+		annotation SummarizationSetBy = User
+
+	column department_name
+		dataType: string
+		lineageTag: 83d66507-3921-50f9-bda4-5274b58a5a31
+		summarizeBy: none
+		sourceColumn: department_name
+
+		annotation SummarizationSetBy = User
+
+	column list_price
+		dataType: decimal
+		formatString: \$#,0.00;-\$#,0.00;\$#,0.00
+		lineageTag: cfea2b64-32a7-5b87-a9a9-59077adfa810
+		summarizeBy: none
+		sourceColumn: list_price
+
+		annotation SummarizationSetBy = User
+
+	partition dim_product = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_product.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"product_key", "product_name", "category_id", "category_name", "department_id", "department_name", "list_price"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"product_key", Int64.Type}, {"product_name", type text}, {"category_id", Int64.Type}, {"category_name", type text}, {"department_id", Int64.Type}, {"department_name", type text}, {"list_price", Currency.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

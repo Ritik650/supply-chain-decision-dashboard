@@ -1,0 +1,96 @@
+{
+  "customers": 12296,
+  "segments": [
+    {
+      "rfm_segment": "Champions",
+      "customers": 2290,
+      "customer_share": 0.18623942745608327,
+      "revenue": 8781141.970000012,
+      "revenue_share": 0.2980321142939116,
+      "median_recency_days": 49.0,
+      "avg_orders": 6.824890829694323,
+      "avg_revenue": 3834.5598122270794
+    },
+    {
+      "rfm_segment": "Loyal",
+      "customers": 2653,
+      "customer_share": 0.2157612231620039,
+      "revenue": 7648062.159999998,
+      "revenue_share": 0.2595753654346232,
+      "median_recency_days": 125.0,
+      "avg_orders": 5.307576328684508,
+      "avg_revenue": 2882.797647945721
+    },
+    {
+      "rfm_segment": "At risk",
+      "customers": 1386,
+      "customer_share": 0.1127195836044242,
+      "revenue": 4610827.039999998,
+      "revenue_share": 0.1564915515623688,
+      "median_recency_days": 296.0,
+      "avg_orders": 5.83044733044733,
+      "avg_revenue": 3326.7150360750347
+    },
+    {
+      "rfm_segment": "Needs attention",
+      "customers": 1998,
+      "customer_share": 0.1624918672739102,
+      "revenue": 3573954.5799999977,
+      "revenue_share": 0.12130008186939799,
+      "median_recency_days": 213.5,
+      "avg_orders": 3.4934934934934936,
+      "avg_revenue": 1788.7660560560548
+    },
+    {
+      "rfm_segment": "Hibernating",
+      "customers": 2475,
+      "customer_share": 0.20128497072218607,
+      "revenue": 2677422.8199999994,
+      "revenue_share": 0.09087177802494473,
+      "median_recency_days": 426.0,
+      "avg_orders": 2.250909090909091,
+      "avg_revenue": 1081.7869979797977
+    },
+    {
+      "rfm_segment": "New & promising",
+      "customers": 1494,
+      "customer_share": 0.12150292778139232,
+      "revenue": 2172335.599999999,
+      "revenue_share": 0.07372910881475384,
+      "median_recency_days": 54.0,
+      "avg_orders": 3.0200803212851404,
+      "avg_revenue": 1454.0398929049527
+    }
+  ],
+  "champions_customer_share": 0.18623942745608327,
+  "champions_revenue_share": 0.2980321142939116,
+  "month3_retention": 0.12704515706806283,
+  "month3_ci": [
+    0.12125839138341654,
+    0.13306626391797366
+  ],
+  "month3_customers": 12224,
+  "retention_slope_pts_per_month": 0.007745333784571884,
+  "retention_slope_p": 0.42679583660073195,
+  "next6m_share_by_segment": {
+    "Champions": 0.5419982316534041,
+    "At risk": 0.565050038491147,
+    "Loyal": 0.5443275732531931,
+    "Needs attention": 0.5686663361427863,
+    "New & promising": 0.5534324133050248,
+    "Hibernating": 0.5551948051948052
+  },
+  "next6m_min": 0.5419982316534041,
+  "next6m_max": 0.5686663361427863,
+  "segment_chi2_p": 0.45050012570041764,
+  "auc": {
+    "recency (more recent = higher)": 0.4910443142436156,
+    "frequency": 0.4967002989513965,
+    "monetary": 0.4942478629458951
+  },
+  "customer_base_existing": 11706,
+  "monthly_repeat_rate": 0.1253772993906259,
+  "revenue_per_active_month": 585.9865940244149,
+  "value_per_repeat_pt_revenue": 823147.088357976,
+  "value_per_repeat_pt_profit": 99987.13395857788
+}

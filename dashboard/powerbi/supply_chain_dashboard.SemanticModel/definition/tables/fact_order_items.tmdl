@@ -1,0 +1,243 @@
+/// One row per order item (the grain). Use the measures in _Measures, not these columns.
+table fact_order_items
+	lineageTag: c8a88d18-6702-5ab1-ba4c-f349c8a50f8a
+
+	column order_item_id
+		dataType: int64
+		isHidden
+		lineageTag: b5978d63-ba6c-5048-944b-b2984a597d3f
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = User
+
+	column order_id
+		dataType: int64
+		isHidden
+		lineageTag: 52fe9198-61fe-50b4-991a-d7b1e644d5c9
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = User
+
+	column order_date_key
+		dataType: int64
+		isHidden
+		lineageTag: 65d1d92b-1b02-5837-bc50-47d58b3b217c
+		summarizeBy: none
+		sourceColumn: order_date_key
+
+		annotation SummarizationSetBy = User
+
+	column ship_date_key
+		dataType: int64
+		isHidden
+		lineageTag: b2810cb9-79f4-59b2-b246-8487e07882de
+		summarizeBy: none
+		sourceColumn: ship_date_key
+
+		annotation SummarizationSetBy = User
+
+	column customer_key
+		dataType: int64
+		isHidden
+		lineageTag: 9e31a909-f7a9-513e-bf95-aaf54912ac54
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = User
+
+	column product_key
+		dataType: int64
+		isHidden
+		lineageTag: 4450f66b-8604-57c3-906b-14aa634256cf
+		summarizeBy: none
+		sourceColumn: product_key
+
+		annotation SummarizationSetBy = User
+
+	column geo_key
+		dataType: int64
+		isHidden
+		lineageTag: 55adae5f-4a5f-546f-aed4-651bdf5d4392
+		summarizeBy: none
+		sourceColumn: geo_key
+
+		annotation SummarizationSetBy = User
+
+	column shipping_key
+		dataType: int64
+		isHidden
+		lineageTag: 97fae859-d59e-52d9-96ca-1fbe61e15c89
+		summarizeBy: none
+		sourceColumn: shipping_key
+
+		annotation SummarizationSetBy = User
+
+	column order_status
+		dataType: string
+		lineageTag: 7e126a7c-25f8-5bbd-a985-22c6a7a129f7
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = User
+
+	column delivery_status
+		dataType: string
+		lineageTag: 113d5dd0-c257-51eb-9303-caddea8d4999
+		summarizeBy: none
+		sourceColumn: delivery_status
+
+		annotation SummarizationSetBy = User
+
+	/// FALSE for CANCELED and SUSPECTED_FRAUD; every KPI uses TRUE only
+	column is_valid_order
+		dataType: boolean
+		isHidden
+		lineageTag: a771e877-ed49-5bfe-81fd-111a9b327ac9
+		summarizeBy: none
+		sourceColumn: is_valid_order
+
+		annotation SummarizationSetBy = User
+
+	/// actual_days > scheduled_days
+	column is_late
+		dataType: boolean
+		isHidden
+		lineageTag: 32b5609e-5a5d-5a0b-bd4e-33d2065b932c
+		summarizeBy: none
+		sourceColumn: is_late
+
+		annotation SummarizationSetBy = User
+
+	column quantity
+		dataType: int64
+		isHidden
+		lineageTag: 674d551f-3476-5a7c-9d48-23d6eb071091
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = User
+
+	column unit_price
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.00;-\$#,0.00;\$#,0.00
+		lineageTag: 51f92073-0f1a-5228-b3e2-7b35cc9900fe
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = User
+
+	/// gross = unit_price x quantity
+	column sales
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 55a1ae85-9990-566e-bd50-8a6c6740d366
+		summarizeBy: sum
+		sourceColumn: sales
+
+		annotation SummarizationSetBy = User
+
+	column discount
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 8bdd3710-8091-56d2-aeb0-fce2ade05389
+		summarizeBy: sum
+		sourceColumn: discount
+
+		annotation SummarizationSetBy = User
+
+	/// rate actually applied = discount / sales
+	column discount_rate
+		dataType: double
+		isHidden
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5dc28016-f2c5-57c8-a7a3-97ea87d0bb25
+		summarizeBy: sum
+		sourceColumn: discount_rate
+
+		annotation SummarizationSetBy = User
+
+	/// net revenue = sales - discount
+	column item_total
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 76882cf7-ac1a-5d11-ad44-bab3cd543843
+		summarizeBy: sum
+		sourceColumn: item_total
+
+		annotation SummarizationSetBy = User
+
+	column profit
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 361cb87c-a94a-51dc-b3e9-01bfac32a961
+		summarizeBy: sum
+		sourceColumn: profit
+
+		annotation SummarizationSetBy = User
+
+	/// actual shipping days
+	column actual_days
+		dataType: int64
+		lineageTag: fdd5083c-3a07-52b7-8034-a1acceeeef22
+		summarizeBy: none
+		sourceColumn: actual_days
+
+		annotation SummarizationSetBy = User
+
+	column scheduled_days
+		dataType: int64
+		isHidden
+		lineageTag: 0c2d9c56-4b6f-57d0-903c-d4fb68f1bbd9
+		summarizeBy: none
+		sourceColumn: scheduled_days
+
+		annotation SummarizationSetBy = User
+
+	column delay_days
+		dataType: int64
+		isHidden
+		lineageTag: b8bbea3f-4b54-5e3a-8e97-c9e9e9f65385
+		summarizeBy: sum
+		sourceColumn: delay_days
+
+		annotation SummarizationSetBy = User
+
+	column 'Discount Band'
+		dataType: string
+		lineageTag: 53e3a849-3378-5ab0-8022-06b55ab0eaf3
+		summarizeBy: none
+		sourceColumn: Discount Band
+		sortByColumn: 'Discount Band Order'
+
+		annotation SummarizationSetBy = User
+
+	column 'Discount Band Order'
+		dataType: int64
+		isHidden
+		lineageTag: bac25a12-3721-5d79-bafe-0bad082f560e
+		summarizeBy: none
+		sourceColumn: Discount Band Order
+
+		annotation SummarizationSetBy = User
+
+	partition fact_order_items = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_order_items.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"order_item_id", "order_id", "order_date_key", "ship_date_key", "customer_key", "product_key", "geo_key", "shipping_key", "order_status", "delivery_status", "is_valid_order", "is_late", "quantity", "unit_price", "sales", "discount", "discount_rate", "item_total", "profit", "actual_days", "scheduled_days", "delay_days"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"order_item_id", Int64.Type}, {"order_id", Int64.Type}, {"order_date_key", Int64.Type}, {"ship_date_key", Int64.Type}, {"customer_key", Int64.Type}, {"product_key", Int64.Type}, {"geo_key", Int64.Type}, {"shipping_key", Int64.Type}, {"order_status", type text}, {"delivery_status", type text}, {"is_valid_order", type logical}, {"is_late", type logical}, {"quantity", Int64.Type}, {"unit_price", Currency.Type}, {"sales", Currency.Type}, {"discount", Currency.Type}, {"discount_rate", type number}, {"item_total", Currency.Type}, {"profit", Currency.Type}, {"actual_days", Int64.Type}, {"scheduled_days", Int64.Type}, {"delay_days", Int64.Type}}, "en-US"),
+				    Added0 = Table.AddColumn(Typed, "Discount Band", each if [discount_rate] < 0.05 then "0-5%" else if [discount_rate] < 0.10 then "5-10%" else if [discount_rate] < 0.15 then "10-15%" else if [discount_rate] < 0.20 then "15-20%" else "20-25%", type text),
+				    Added1 = Table.AddColumn(Added0, "Discount Band Order", each if [discount_rate] < 0.05 then 1 else if [discount_rate] < 0.10 then 2 else if [discount_rate] < 0.15 then 3 else if [discount_rate] < 0.20 then 4 else 5, Int64.Type)
+				in
+				    Added1
+
+	annotation PBI_ResultType = Table

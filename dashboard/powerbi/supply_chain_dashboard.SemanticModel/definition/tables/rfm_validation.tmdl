@@ -1,0 +1,59 @@
+/// Does RFM predict? Segments scored to Mar 2017 vs orders Apr-Sep 2017 (p4_rfm_validation.sql).
+table rfm_validation
+	lineageTag: 5454d230-bb5e-54de-991c-6d328e8819ac
+
+	column rfm_segment
+		dataType: string
+		lineageTag: 21f2d418-2f6c-5051-bcfb-9e653fa752c7
+		summarizeBy: none
+		sourceColumn: rfm_segment
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: int64
+		lineageTag: 79a21088-6c1f-5827-930a-0e50ea948c4f
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	column share_ordering_next_6m
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 54f1f018-8ee7-52e3-a25d-1a62546fc098
+		summarizeBy: none
+		sourceColumn: share_ordering_next_6m
+
+		annotation SummarizationSetBy = User
+
+	column next_6m_revenue_per_customer
+		dataType: decimal
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 51e6197a-6f7b-5c40-950f-7e83b66a8e5e
+		summarizeBy: none
+		sourceColumn: next_6m_revenue_per_customer
+
+		annotation SummarizationSetBy = User
+
+	column past_revenue_per_customer
+		dataType: decimal
+		formatString: \$#,0;-\$#,0;\$#,0
+		lineageTag: 4be50e56-b06f-5be7-b296-d950076c810d
+		summarizeBy: none
+		sourceColumn: past_revenue_per_customer
+
+		annotation SummarizationSetBy = User
+
+	partition rfm_validation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "rfm_validation.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"rfm_segment", "customers", "share_ordering_next_6m", "next_6m_revenue_per_customer", "past_revenue_per_customer"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"rfm_segment", type text}, {"customers", Int64.Type}, {"share_ordering_next_6m", type number}, {"next_6m_revenue_per_customer", Currency.Type}, {"past_revenue_per_customer", Currency.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
