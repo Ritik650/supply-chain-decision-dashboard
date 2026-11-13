@@ -45,12 +45,14 @@ The ones that changed the analysis:
 
 ```mermaid
 flowchart LR
-    A[(Mendeley CSV)] -->|download_data.py| B[build.py<br/>SQL 00-03 + 15 tests]
-    B --> C[(DuckDB<br/>star schema)]
-    C --> D[sql/analysis/] --> E[Q1-Q4 notebooks] --> F[memo PDF]
-    D --> G[web dashboard<br/>GitHub Pages]
-    C --> H[Power BI project<br/>PBIP]
-    C --> I[text-to-SQL<br/>+ eval]
+    A[("Mendeley CSV")] -->|"download_data.py"| B["build.py<br/>SQL 00-03 + 15 tests"]
+    B --> C[("DuckDB<br/>star schema")]
+    C --> D["sql/analysis"]
+    D --> E["Q1-Q4 notebooks"]
+    E --> F["memo PDF"]
+    D --> G["web dashboard<br/>GitHub Pages"]
+    C --> H["Power BI project<br/>PBIP"]
+    C --> I["text-to-SQL<br/>+ eval"]
 ```
 
 Star schema at order-item grain: `fact_order_items` with `dim_date`, `dim_customer`, `dim_product`,

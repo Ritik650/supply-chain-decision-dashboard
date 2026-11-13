@@ -2,28 +2,29 @@
 
 ```mermaid
 flowchart LR
-    subgraph Source
-        M[(Mendeley Data v5<br/>DataCo CSV, latin-1)]
+    subgraph Source["Source"]
+        M[("Mendeley Data v5<br/>DataCo CSV, latin-1")]
     end
-    subgraph Build["python scripts/build.py  (one command, ~6 s)"]
-        T[transcode to UTF-8] --> L[00_load.sql<br/>raw.dataco]
-        L --> S[01_staging.sql<br/>types, renames, drops, fixes]
-        S --> D[02_dimensions.sql<br/>5 dimensions]
-        D --> F[03_fact.sql<br/>fact_order_items]
-        F --> Q[sql/tests/ 15 rules<br/>data_quality_log.md]
+    subgraph Build["python scripts/build.py (one command, about 6 s)"]
+        T["transcode to UTF-8"] --> L["00_load.sql<br/>raw.dataco"]
+        L --> S["01_staging.sql<br/>types, renames, drops, fixes"]
+        S --> D["02_dimensions.sql<br/>5 dimensions"]
+        D --> F["03_fact.sql<br/>fact_order_items"]
+        F --> Q["sql/tests: 15 rules<br/>data_quality_log.md"]
     end
-    M -->|download_data.py<br/>SHA-256 checked| T
-    F --> W[(DuckDB<br/>supply_chain.duckdb)]
-    W --> A[sql/analysis/<br/>one query per number]
-    A --> N[notebooks Q1-Q4<br/>stats tests]
-    N --> J[outputs/findings/*.json]
-    J --> MEMO[memo/decision_memo.pdf]
-    A --> X[export_dashboard.py<br/>items.bin + reference.json]
-    X --> WEB[dashboard/web<br/>static, GitHub Pages]
-    WEB -. check_dashboard.py<br/>39 numbers vs SQL .-> A
-    W --> PBI[data/export/*.csv] --> PBIP[make_pbip.py<br/>Power BI project]
-    W --> G[genai/ask.py<br/>text-to-SQL, read-only]
-    G --> E[genai/eval<br/>40 gold questions]
+    M -->|"download_data.py<br/>SHA-256 checked"| T
+    F --> W[("DuckDB<br/>supply_chain.duckdb")]
+    W --> A["sql/analysis<br/>one query per number"]
+    A --> N["notebooks Q1-Q4<br/>stats tests"]
+    N --> J["outputs/findings<br/>JSON per question"]
+    J --> MEMO["memo/decision_memo.pdf"]
+    A --> X["export_dashboard.py<br/>items.bin + reference.json"]
+    X --> WEB["dashboard/web<br/>static, GitHub Pages"]
+    WEB -.->|"check_dashboard.py<br/>39 numbers vs SQL"| A
+    W --> PBI["data/export<br/>CSV per table"]
+    PBI --> PBIP["make_pbip.py<br/>Power BI project"]
+    W --> G["genai/ask.py<br/>text-to-SQL, read-only"]
+    G --> E["genai/eval<br/>40 gold questions"]
 ```
 
 ## Star schema
