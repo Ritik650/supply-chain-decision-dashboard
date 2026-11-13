@@ -20,3 +20,4 @@ table 'Max Discount'
 		source = GENERATESERIES ( 0, 0.25, 0.01 )
 
 	annotation PBI_Id = 39a4f1dd06e35eafa81cde978ab75663
+

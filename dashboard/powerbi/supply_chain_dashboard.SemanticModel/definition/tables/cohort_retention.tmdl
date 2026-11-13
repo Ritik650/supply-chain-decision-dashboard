@@ -11,6 +11,8 @@ table cohort_retention
 
 		annotation SummarizationSetBy = User
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column cohort_size
 		dataType: int64
 		lineageTag: a9409929-c6fc-5762-a931-85318530a810
@@ -56,3 +58,4 @@ table cohort_retention
 				    Typed
 
 	annotation PBI_ResultType = Table
+

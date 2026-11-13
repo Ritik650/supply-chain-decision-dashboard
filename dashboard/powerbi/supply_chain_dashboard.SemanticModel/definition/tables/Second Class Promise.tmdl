@@ -20,3 +20,4 @@ table 'Second Class Promise'
 		source = GENERATESERIES ( 2, 6, 1 )
 
 	annotation PBI_Id = c5aba86b7260534b93cab3be223321e9
+

@@ -139,7 +139,7 @@ def summarise(path: Path) -> dict:
 
 
 def write_results_md() -> None:
-    runs = sorted(RUNS.glob("*.jsonl"))
+    runs = sorted(RUNS.glob("*.jsonl"), key=lambda p: (p.stem.split("_")[0], "fresh" in p.stem))
     real = [summarise(p) for p in runs if not p.name.startswith("oracle")]
     oracle = [summarise(p) for p in runs if p.name.startswith("oracle")]
     L = ["# Text-to-SQL evaluation results", "",
@@ -175,9 +175,12 @@ def write_results_md() -> None:
             for r in fails:
                 L.append(f"| {r['id']} | {r['difficulty']} | {r['failure_type']} | {r['reason'][:80]} | {r['question']} |")
             L.append("")
-        L += ["## Failure analysis (write by hand after reading the SQL in runs/*.jsonl)", "",
-              "1. _Most common failure type, with one example question and the wrong SQL fragment._",
-              "2. _Second._", "3. _Third._", "", "**Prompt change made for v2:** _describe the one revision._", ""]
+        analysis = EVAL / "failure_analysis.md"
+        if analysis.exists():
+            L += [analysis.read_text(encoding="utf-8").strip(), ""]
+        else:
+            L += ["## Failure analysis", "", "_Not written yet: read the SQL in runs/*.jsonl and write "
+                  "genai/eval/failure_analysis.md._", ""]
     if oracle:
         s = oracle[-1]
         L += ["## Harness self-check", "",

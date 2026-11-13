@@ -46,13 +46,17 @@ def retrieve(uri: str) -> Resource:
 def validate_json() -> list[str]:
     problems = []
     registry = Registry(retrieve=retrieve)
-    files = [p for p in REPORT.rglob("*.json") if "StaticResources" not in p.parts]
-    files += [REPORT / "definition.pbir", PBI / "supply_chain_dashboard.pbip", MODEL.parent / "definition.pbism"]
+    # .pbi/ holds Desktop's local editor settings, which are not part of the report definition.
+    files = [p for p in REPORT.rglob("*.json") if "StaticResources" not in p.parts and ".pbi" not in p.parts]
+    # Power BI Desktop omits "$schema" from these three files when it saves; that is allowed.
+    optional = {REPORT / "definition.pbir", PBI / "supply_chain_dashboard.pbip", MODEL.parent / "definition.pbism"}
+    files += sorted(optional)
     for f in files:
         doc = json.loads(f.read_text(encoding="utf-8"))
         url = doc.get("$schema")
         if not url:
-            problems.append(f"{f.relative_to(PBI)}: no $schema")
+            if f not in optional:
+                problems.append(f"{f.relative_to(PBI)}: no $schema")
             continue
         schema = fetch(url)
         schema.setdefault("$id", url)

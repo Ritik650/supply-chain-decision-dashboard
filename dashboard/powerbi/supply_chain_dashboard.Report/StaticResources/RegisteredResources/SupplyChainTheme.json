@@ -1,6 +1,15 @@
 {
   "name": "Supply Chain Decisions",
-  "dataColors": ["#a8a69f", "#52514e", "#d03b3b", "#d6d4ce", "#6b6a65", "#8a8984", "#3f3e3b", "#cfcdc6"],
+  "dataColors": [
+    "#a8a69f",
+    "#52514e",
+    "#d03b3b",
+    "#d6d4ce",
+    "#6b6a65",
+    "#8a8984",
+    "#3f3e3b",
+    "#cfcdc6"
+  ],
   "background": "#fcfcfb",
   "foreground": "#111110",
   "tableAccent": "#111110",
@@ -11,21 +20,71 @@
   "center": "#f2b8b5",
   "minimum": "#f6f5f2",
   "textClasses": {
-    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#111110" },
-    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 26, "color": "#111110" },
-    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#6b6a65" },
-    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#111110" }
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#111110"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 26,
+      "color": "#111110"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#6b6a65"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#111110"
+    }
   },
   "visualStyles": {
     "*": {
       "*": {
-        "border": [{ "show": true, "color": { "solid": { "color": "#e2e1dc" } }, "radius": 12 }],
-        "background": [{ "show": true, "color": { "solid": { "color": "#ffffff" } } }],
-        "dropShadow": [{ "show": false }]
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#e2e1dc"
+              }
+            },
+            "radius": 12
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#ffffff"
+              }
+            }
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ]
       }
     },
     "page": {
-      "*": { "background": [{ "color": { "solid": { "color": "#fcfcfb" } }, "transparency": 0 }] }
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#fcfcfb"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
     }
   }
 }

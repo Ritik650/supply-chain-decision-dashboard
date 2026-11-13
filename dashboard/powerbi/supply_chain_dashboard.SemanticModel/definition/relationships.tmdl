@@ -24,7 +24,8 @@ relationship 94c7702c-6324-5189-901e-f6c6ff0d86cf
 	toColumn: dim_shipping.shipping_key
 
 relationship c053d00b-0888-5844-b576-78b56a9e8aa3
-	fromCardinality: one
 	crossFilteringBehavior: bothDirections
+	fromCardinality: one
 	fromColumn: rfm_segments.customer_key
 	toColumn: dim_customer.customer_key
+

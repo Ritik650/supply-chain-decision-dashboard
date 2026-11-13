@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
   "name": "kpis",
   "position": {
     "x": 24,
     "y": 206,
     "z": 900,
-    "width": 1232,
     "height": 84,
+    "width": 1232,
     "tabOrder": 900
   },
   "visual": {
@@ -23,11 +23,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Revenue"
+                  "Property": "Revenue (M)"
                 }
               },
-              "queryRef": "_Measures.Revenue",
-              "nativeQueryRef": "Revenue",
+              "queryRef": "_Measures.Revenue (M)",
+              "nativeQueryRef": "Revenue (M)",
               "displayName": "Revenue"
             },
             {
@@ -38,11 +38,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Profit"
+                  "Property": "Profit (M)"
                 }
               },
-              "queryRef": "_Measures.Profit",
-              "nativeQueryRef": "Profit",
+              "queryRef": "_Measures.Profit (M)",
+              "nativeQueryRef": "Profit (M)",
               "displayName": "Profit"
             },
             {
@@ -152,13 +152,6 @@
               }
             },
             "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1.0D"
-                }
-              }
-            },
-            "displayUnits": {
               "expr": {
                 "Literal": {
                   "Value": "1.0D"

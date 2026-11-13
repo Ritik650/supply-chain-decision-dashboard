@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
   "name": "nav",
   "position": {
     "x": 640,
     "y": 14,
     "z": 300,
-    "width": 616,
     "height": 36,
+    "width": 616,
     "tabOrder": 300
   },
   "visual": {
@@ -120,13 +120,6 @@
                       "Value": "'#E2E1DC'"
                     }
                   }
-                }
-              }
-            },
-            "roundEdge": {
-              "expr": {
-                "Literal": {
-                  "Value": "8.0D"
                 }
               }
             }

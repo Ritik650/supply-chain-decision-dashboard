@@ -241,3 +241,4 @@ table fact_order_items
 				    Added1
 
 	annotation PBI_ResultType = Table
+

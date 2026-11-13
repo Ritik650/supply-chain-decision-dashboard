@@ -52,6 +52,8 @@ table dim_customer
 
 		annotation SummarizationSetBy = User
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	/// month of first valid order
 	column cohort_month
 		dataType: dateTime
@@ -61,6 +63,8 @@ table dim_customer
 		sourceColumn: cohort_month
 
 		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition dim_customer = m
 		mode: import
@@ -74,3 +78,4 @@ table dim_customer
 				    Typed
 
 	annotation PBI_ResultType = Table
+

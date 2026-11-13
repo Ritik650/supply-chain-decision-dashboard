@@ -11,6 +11,10 @@ by [`scripts/make_pbip.py`](../../scripts/make_pbip.py) from the same star schem
 | Report | 6 pages, 91 visuals, synced slicers, report-level filter for the Jan 2015 – Sep 2017 window |
 | Theme | `theme.json`: grey marks, one red accent (#D03B3B) for late / loss-making / over-cap |
 
+![Summary page](screenshots/1_summary.png)
+
+All six pages: [`screenshots/`](screenshots/) · full export: [`supply_chain_dashboard.pdf`](supply_chain_dashboard.pdf)
+
 ## Open it
 
 ```bash

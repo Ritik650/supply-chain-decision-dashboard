@@ -7,10 +7,22 @@ and an LLM text-to-SQL assistant with a 40-question execution-accuracy harness.
 
 **[Live dashboard](https://ritik650.github.io/supply-chain-decision-dashboard/)** ·
 **[Decision memo (PDF)](memo/decision_memo.pdf)** ·
+**[Power BI report (PDF)](dashboard/powerbi/supply_chain_dashboard.pdf)** ·
 [Notebooks](notebooks/) · [Data-quality log](docs/data_quality_log.md) · [KPI definitions](docs/kpi_definitions.md) ·
 [Architecture](docs/architecture.md)
 
 ![Dashboard demo](dashboard/demo.gif)
+
+<details>
+<summary><b>Power BI version</b> (5 pages + definitions, generated as a PBIP project): click to expand</summary>
+
+| | |
+|---|---|
+| ![Summary](dashboard/powerbi/screenshots/1_summary.png) | ![Delivery](dashboard/powerbi/screenshots/2_delivery.png) |
+| ![Discounts](dashboard/powerbi/screenshots/3_discounts.png) | ![Customers](dashboard/powerbi/screenshots/4_customers.png) |
+| ![Products](dashboard/powerbi/screenshots/5_products.png) | ![Definitions](dashboard/powerbi/screenshots/6_definitions.png) |
+
+</details>
 
 ## Findings
 
@@ -23,7 +35,7 @@ traces to a query in [`sql/analysis/`](sql/analysis/) and a notebook cell. Findi
 | Q2. Where do discounts cut into margin? | Deeper discounts buy no volume: **2.18 vs 2.18** units per line above vs at or below 10% (within-product elasticity −0.006, 95% CI −0.057 to +0.044); margin 11.8% vs 12.1% (p = 0.29). One category (Women's Apparel) shows a real margin gap. | Cap discounts at **10%**: **$240k–$371k profit a year** (central $371k); pays unless more than 42% of capped volume is lost. Test in one market first. | [Q2 notebook](notebooks/q2_discounts.ipynb) · page 3 |
 | Q3. Who are the valuable customers, and do they come back? | Champions are 19% of customers and 30% of revenue, but RFM does not predict the next order: scored to March 2017, segments reordered at **54–57%** over six months (Champions 54.2% vs Hibernating 55.5%, p = 0.45; AUC 0.49–0.50). Month-3 retention is a flat **12.7%**. | Don't fund RFM-targeted win-back; run one broad offer as a randomised holdout. +1 pt of monthly repeat rate ≈ **$100k profit a year**. | [Q3 notebook](notebooks/q3_customers.ipynb) · page 4 |
 | Q4. Which products make the profit? | Profit is exactly as concentrated as revenue: the top 20% of products earn **96.1%** of profit and **96.1%** of revenue; **7** products earn 83% of profit; only **2** small products lose money. The 18.7% of loss-making lines are spread evenly (Cramér's V ≤ 0.02). | No delisting case. Product mix isn't the lever; discount policy is. Run the cap test on the 7 A-class products. | [Q4 notebook](notebooks/q4_products.ipynb) · page 5 |
-| GenAI. How often is the text-to-SQL assistant right? | **Not measured yet**: the run needs an LLM API key. The harness is verified (40/40 when the "model" returns the gold SQL). | Run `make eval`; [results.md](genai/eval/results.md) is regenerated with the real number. | [genai/](genai/) |
+| GenAI. How often is the text-to-SQL assistant right? | **9/10 on fresh, held-back questions** (open-weight `gpt-oss-120b` via Groq, strict execution accuracy). Prompt v1 scored **24/30** on the test set; one revision took it to **28/30** (optimistic: written after reading those failures). Top failures: month and label representation, "all statuses" scope wording, table grain. | Use it for ad-hoc questions with the SQL always shown; keep the dashboard as the source of record for KPIs. | [results.md](genai/eval/results.md) |
 
 ## Data-quality catches
 
@@ -72,6 +84,16 @@ with file access disabled and a 5-second timeout; retries once with the error; a
 only. [`genai/eval/`](genai/eval/) holds 30 test questions (10 easy, 10 medium, 10 hard) plus 10 fresh questions
 held back for the score after one prompt revision.
 
+| Run | Questions | Execution accuracy | Easy / Medium / Hard |
+|---|---|---:|---|
+| Prompt v1 | 30 test | **24/30** (80%) | 7/10 · 10/10 · 7/10 |
+| Prompt v2 (one revision) | same 30 test | 28/30 (93%), optimistic | 10/10 · 10/10 · 8/10 |
+| Prompt v2 | **10 fresh, never used for tuning** | **9/10** (90%) | 3/3 · 3/4 · 3/3 |
+
+Model `openai/gpt-oss-120b` on Groq, temperature 0. Strict scoring: a month returned as text instead of a date
+counts as wrong even when the values match. The three most common failures, with examples, are written up in
+[`genai/eval/results.md`](genai/eval/results.md).
+
 ```bash
 python genai/ask.py "What was the late-delivery rate by shipping mode in 2016?"
 ```
@@ -89,8 +111,9 @@ python -m http.server -d dashboard/web   # open http://localhost:8000
 python memo/build_memo.py                # memo PDF from the findings
 ```
 
-Or `make all`. For the LLM evaluation, set `GEMINI_API_KEY` (free at Google AI Studio) or point
-`SCDD_PROVIDER=openai` + `OPENAI_BASE_URL` at Groq, OpenRouter or a local Ollama model, then `make eval`.
+Or `make all`. For the LLM evaluation, put `GROQ_API_KEY=...` (free at console.groq.com) in a `.env` file at the
+repo root, then `make eval`. `GEMINI_API_KEY` or any OpenAI-compatible endpoint (`SCDD_PROVIDER=openai` +
+`OPENAI_BASE_URL`, e.g. a local Ollama model) also work; see [`genai/llm.py`](genai/llm.py).
 
 ## Repository
 

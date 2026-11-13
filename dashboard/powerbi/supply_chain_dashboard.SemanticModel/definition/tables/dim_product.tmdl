@@ -74,3 +74,4 @@ table dim_product
 				    Typed
 
 	annotation PBI_ResultType = Table
+

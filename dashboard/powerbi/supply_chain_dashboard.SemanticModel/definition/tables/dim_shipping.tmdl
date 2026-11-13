@@ -16,6 +16,7 @@ table dim_shipping
 		lineageTag: 70cd2033-7a35-59b2-bcd0-35d8bb91de45
 		summarizeBy: none
 		sourceColumn: shipping_mode
+		sortByColumn: promised_days
 
 		annotation SummarizationSetBy = User
 
@@ -47,3 +48,4 @@ table dim_shipping
 				    Typed
 
 	annotation PBI_ResultType = Table
+

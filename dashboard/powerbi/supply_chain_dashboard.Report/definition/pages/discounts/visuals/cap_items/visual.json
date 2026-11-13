@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
-  "name": "cap_cards",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "cap_items",
   "position": {
     "x": 24,
     "y": 706,
     "z": 1400,
+    "height": 72,
     "width": 400,
-    "height": 250,
     "tabOrder": 1400
   },
   "visual": {
@@ -29,66 +29,6 @@
               "queryRef": "_Measures.Items Above Cap",
               "nativeQueryRef": "Items Above Cap",
               "displayName": "Items above the cap"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Profit Recovered per Year (volume holds)"
-                }
-              },
-              "queryRef": "_Measures.Profit Recovered per Year (volume holds)",
-              "nativeQueryRef": "Profit Recovered per Year (volume holds)",
-              "displayName": "High · volume holds ($/yr)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Profit Recovered per Year (central)"
-                }
-              },
-              "queryRef": "_Measures.Profit Recovered per Year (central)",
-              "nativeQueryRef": "Profit Recovered per Year (central)",
-              "displayName": "Central · data elasticity ($/yr)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Profit Recovered per Year (low)"
-                }
-              },
-              "queryRef": "_Measures.Profit Recovered per Year (low)",
-              "nativeQueryRef": "Profit Recovered per Year (low)",
-              "displayName": "Low · elasticity −1.5 ($/yr)"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Measures"
-                    }
-                  },
-                  "Property": "Break-even Volume Loss %"
-                }
-              },
-              "queryRef": "_Measures.Break-even Volume Loss %",
-              "nativeQueryRef": "Break-even Volume Loss %",
-              "displayName": "Break-even volume loss"
             }
           ]
         }
@@ -121,7 +61,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "14.0D"
+                  "Value": "16.0D"
                 }
               }
             },
@@ -137,13 +77,6 @@
               }
             },
             "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1.0D"
-                }
-              }
-            },
-            "displayUnits": {
               "expr": {
                 "Literal": {
                   "Value": "1.0D"

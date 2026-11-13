@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
   "name": "kpis",
   "position": {
     "x": 24,
     "y": 206,
     "z": 900,
-    "width": 1232,
     "height": 88,
+    "width": 1232,
     "tabOrder": 900
   },
   "visual": {
@@ -38,11 +38,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Discount Spend"
+                  "Property": "Discount Spend (M)"
                 }
               },
-              "queryRef": "_Measures.Discount Spend",
-              "nativeQueryRef": "Discount Spend",
+              "queryRef": "_Measures.Discount Spend (M)",
+              "nativeQueryRef": "Discount Spend (M)",
               "displayName": "Discount spend"
             },
             {
@@ -53,11 +53,11 @@
                       "Entity": "_Measures"
                     }
                   },
-                  "Property": "Discount Above 10%"
+                  "Property": "Discount Above 10% (M)"
                 }
               },
-              "queryRef": "_Measures.Discount Above 10%",
-              "nativeQueryRef": "Discount Above 10%",
+              "queryRef": "_Measures.Discount Above 10% (M)",
+              "nativeQueryRef": "Discount Above 10% (M)",
               "displayName": "Discount above 10%"
             },
             {
@@ -142,13 +142,6 @@
                   "Value": "1.0D"
                 }
               }
-            },
-            "displayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1.0D"
-                }
-              }
             }
           },
           "selector": {
@@ -170,7 +163,7 @@
             }
           },
           "selector": {
-            "metadata": "_Measures.Discount Above 10%"
+            "metadata": "_Measures.Discount Above 10% (M)"
           }
         }
       ],

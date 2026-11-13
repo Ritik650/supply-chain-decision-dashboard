@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
   "name": "kpis_mom",
   "position": {
-    "x": 24,
-    "y": 290,
+    "x": 23.327693931221631,
+    "y": 286.79341362501884,
     "z": 1000,
-    "width": 1232,
-    "height": 34,
+    "height": 42.538735992227679,
+    "width": 1232.2511264845309,
     "tabOrder": 1000
   },
   "visual": {
@@ -151,13 +151,6 @@
                   "Value": "1.0D"
                 }
               }
-            },
-            "displayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1.0D"
-                }
-              }
             }
           },
           "selector": {
@@ -280,5 +273,93 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "31b619e8ee79091e2b00",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Revenue MoM"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "522797644205dd66c79e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Profit MoM"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "498a6213e71085bbb00c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Margin MoM"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "84a4591a1791eea40709",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Late Rate MoM"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "c8f27dce03ec5ca1c05b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Orders MoM"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "c14452b8498d5335cdc7",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "AOV MoM"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

@@ -20,6 +20,8 @@ table rfm_segments
 
 		annotation SummarizationSetBy = User
 
+		annotation UnderlyingDateTimeDataType = Date
+
 	column frequency
 		dataType: int64
 		lineageTag: 86617e5e-281b-5a28-9362-b08cc5cceccc
@@ -89,3 +91,4 @@ table rfm_segments
 				    Typed
 
 	annotation PBI_ResultType = Table
+

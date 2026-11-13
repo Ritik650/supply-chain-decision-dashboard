@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
   "name": "whatif",
   "position": {
     "x": 760,
     "y": 902,
     "z": 1900,
-    "width": 496,
     "height": 96,
+    "width": 496,
     "tabOrder": 1900
   },
   "visual": {
@@ -107,13 +107,6 @@
               }
             },
             "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1.0D"
-                }
-              }
-            },
-            "displayUnits": {
               "expr": {
                 "Literal": {
                   "Value": "1.0D"

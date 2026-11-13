@@ -26,3 +26,6 @@ ref table 'Max Discount'
 ref table 'First Class Promise'
 ref table 'Second Class Promise'
 ref table _Measures
+
+ref cultureInfo en-US
+

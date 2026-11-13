@@ -512,7 +512,7 @@ table _Measures
 		displayFolder: 5 Customers
 		lineageTag: b00cf21a-f75e-5296-aa88-38c0c2336ae0
 
-	measure 'Product Profit Rank' = IF ( NOT ISBLANK ( [Profit] ), RANKX ( ALLSELECTED ( dim_product[product_name] ), [Profit], , DESC, DENSE ) )
+	measure 'Product Profit Rank' = IF ( NOT ISBLANK ( [Profit] ), RANKX ( ALLSELECTED ( dim_product ), [Profit], , DESC, DENSE ) )
 		formatString: #,0
 		displayFolder: 6 Products
 		lineageTag: df27f21f-5148-5ae0-b11a-b2243cc191c8
@@ -520,29 +520,29 @@ table _Measures
 	measure 'Cumulative Profit Share' =
 			VAR p = [Profit]
 			VAR cum =
-			    SUMX ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] >= p ), [Profit] )
+			    SUMX ( FILTER ( ALLSELECTED ( dim_product ), [Profit] >= p ), [Profit] )
 			RETURN
-			    IF ( NOT ISBLANK ( p ), DIVIDE ( cum, CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) ) )
+			    IF ( NOT ISBLANK ( p ), DIVIDE ( cum, CALCULATE ( [Profit], ALLSELECTED ( dim_product ) ) ) )
 		formatString: 0%;-0%;0%
 		displayFolder: 6 Products
 		lineageTag: 82dbf002-cf93-5eed-b1f7-804c8060c964
 
 	/// A = first 80% of cumulative profit, B = next 15%, C = the rest
 	measure 'ABC Class' =
-			VAR own = DIVIDE ( [Profit], CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) )
+			VAR own = DIVIDE ( [Profit], CALCULATE ( [Profit], ALLSELECTED ( dim_product ) ) )
 			VAR priorShare = [Cumulative Profit Share] - own
 			RETURN
 			    IF ( NOT ISBLANK ( [Revenue] ), SWITCH ( TRUE (), priorShare < 0.80, "A", priorShare < 0.95, "B", "C" ) )
 		displayFolder: 6 Products
 		lineageTag: 18cc836e-a8d4-58ae-8afe-2d31192dc674
 
-	measure 'A-class Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [ABC Class] = "A" ) )
+	measure 'A-class Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product ), [ABC Class] = "A" ) )
 		formatString: 0
 		displayFolder: 6 Products
 		lineageTag: 798bc976-9385-52bc-be38-034615d5f801
 
 	measure 'Profit Share Top 20% Products' =
-			VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+			VAR sold = FILTER ( ALLSELECTED ( dim_product ), NOT ISBLANK ( [Revenue] ) )
 			VAR n = ROUNDUP ( 0.2 * COUNTROWS ( sold ), 0 )
 			VAR topSet = TOPN ( n, sold, [Profit], DESC )
 			RETURN
@@ -551,7 +551,7 @@ table _Measures
 		displayFolder: 6 Products
 		lineageTag: 07298e85-0dfb-59bd-a015-97b672e59a4d
 
-	measure 'Loss-making Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] < 0 ) ) + 0
+	measure 'Loss-making Products' = COUNTROWS ( FILTER ( ALLSELECTED ( dim_product ), [Profit] < 0 ) ) + 0
 		formatString: 0
 		displayFolder: 6 Products
 		lineageTag: cc757db8-f8a9-52bf-ae17-4bb1fd96488c
@@ -592,7 +592,7 @@ table _Measures
 
 	/// 1 for top-half-revenue products with margin under 10%, or any loss-maker
 	measure 'Watch List Flag' =
-			VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+			VAR sold = FILTER ( ALLSELECTED ( dim_product ), NOT ISBLANK ( [Revenue] ) )
 			VAR revRank = RANKX ( sold, [Revenue], , DESC )
 			RETURN
 			    IF (
@@ -628,6 +628,22 @@ table _Measures
 	measure 'Watch Font Color' = IF ( [Profit] < 0, "#D03B3B", "#111110" )
 		displayFolder: 6 Products
 		lineageTag: 1abf648f-d9b0-5b21-ac76-8f1a26883c25
+
+	measure 'Revenue (M)' = FORMAT ( [Revenue] / 1000000, "$0.00" ) & "M"
+		displayFolder: 7 Text
+		lineageTag: 75894a8e-6834-5763-9908-b6498fec75d1
+
+	measure 'Profit (M)' = FORMAT ( [Profit] / 1000000, "$0.00" ) & "M"
+		displayFolder: 7 Text
+		lineageTag: f6ef71b4-2a3a-5e91-a5ce-c944200de1d0
+
+	measure 'Discount Spend (M)' = FORMAT ( [Discount Spend] / 1000000, "$0.00" ) & "M"
+		displayFolder: 7 Text
+		lineageTag: 9711fb19-373c-5fed-8de6-735a897d7936
+
+	measure 'Discount Above 10% (M)' = FORMAT ( [Discount Above 10%] / 1000000, "$0.00" ) & "M"
+		displayFolder: 7 Text
+		lineageTag: 914e8e87-87a0-561b-b9ed-27b830e95b08
 
 	measure 'Alert 1' =
 			"First Class late on "
@@ -690,3 +706,4 @@ table _Measures
 	partition _Measures = calculated
 		mode: import
 		source = ROW ( "Value", 1 )
+

@@ -127,7 +127,7 @@ TABLES = {
     ]),
     "dim_shipping": dict(desc="Shipping mode x payment type; promised_days is fixed per mode.", cols=[
         c("shipping_key", T_INT, hidden=True, summarize="none"),
-        c("shipping_mode", T_STR),
+        c("shipping_mode", T_STR, sort_by="promised_days"),
         c("promised_days", T_INT, summarize="none"),
         c("payment_type", T_STR),
     ]),
@@ -397,30 +397,30 @@ RETURN
     )""", None, "5 Customers"),
     mm("Cohort Font Color", f'IF ( [Cohort Retention (shown)] >= 0.15, "#FFFFFF", "{INK}" )', None, "5 Customers"),
     # ---- products ----
-    mm("Product Profit Rank", "IF ( NOT ISBLANK ( [Profit] ), RANKX ( ALLSELECTED ( dim_product[product_name] ), [Profit], , DESC, DENSE ) )",
+    mm("Product Profit Rank", "IF ( NOT ISBLANK ( [Profit] ), RANKX ( ALLSELECTED ( dim_product ), [Profit], , DESC, DENSE ) )",
        INT, "6 Products"),
     mm("Cumulative Profit Share", """
 VAR p = [Profit]
 VAR cum =
-    SUMX ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] >= p ), [Profit] )
+    SUMX ( FILTER ( ALLSELECTED ( dim_product ), [Profit] >= p ), [Profit] )
 RETURN
-    IF ( NOT ISBLANK ( p ), DIVIDE ( cum, CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) ) )""",
+    IF ( NOT ISBLANK ( p ), DIVIDE ( cum, CALCULATE ( [Profit], ALLSELECTED ( dim_product ) ) ) )""",
        PCT0, "6 Products"),
     mm("ABC Class", """
-VAR own = DIVIDE ( [Profit], CALCULATE ( [Profit], ALLSELECTED ( dim_product[product_name] ) ) )
+VAR own = DIVIDE ( [Profit], CALCULATE ( [Profit], ALLSELECTED ( dim_product ) ) )
 VAR priorShare = [Cumulative Profit Share] - own
 RETURN
     IF ( NOT ISBLANK ( [Revenue] ), SWITCH ( TRUE (), priorShare < 0.80, "A", priorShare < 0.95, "B", "C" ) )""",
        None, "6 Products", "A = first 80% of cumulative profit, B = next 15%, C = the rest"),
-    mm("A-class Products", 'COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [ABC Class] = "A" ) )',
+    mm("A-class Products", 'COUNTROWS ( FILTER ( ALLSELECTED ( dim_product ), [ABC Class] = "A" ) )',
        "0", "6 Products"),
     mm("Profit Share Top 20% Products", """
-VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+VAR sold = FILTER ( ALLSELECTED ( dim_product ), NOT ISBLANK ( [Revenue] ) )
 VAR n = ROUNDUP ( 0.2 * COUNTROWS ( sold ), 0 )
 VAR topSet = TOPN ( n, sold, [Profit], DESC )
 RETURN
     DIVIDE ( SUMX ( topSet, [Profit] ), SUMX ( sold, [Profit] ) )""", PCT1, "6 Products"),
-    mm("Loss-making Products", "COUNTROWS ( FILTER ( ALLSELECTED ( dim_product[product_name] ), [Profit] < 0 ) ) + 0",
+    mm("Loss-making Products", "COUNTROWS ( FILTER ( ALLSELECTED ( dim_product ), [Profit] < 0 ) ) + 0",
        "0", "6 Products"),
     mm("Loss-making Line Share", "DIVIDE ( CALCULATE ( [Valid Items], fact_order_items[profit] < 0 ), [Valid Items] )",
        PCT1, "6 Products"),
@@ -431,7 +431,7 @@ RETURN
     mm("Top15 Cumulative Share", "IF ( [Product Profit Rank] <= 15, [Cumulative Profit Share] )", PCT0, "6 Products"),
     mm("Top15 Class", 'IF ( [Product Profit Rank] <= 15, [ABC Class] )', None, "6 Products"),
     mm("Watch List Flag", """
-VAR sold = FILTER ( ALLSELECTED ( dim_product[product_name] ), NOT ISBLANK ( [Revenue] ) )
+VAR sold = FILTER ( ALLSELECTED ( dim_product ), NOT ISBLANK ( [Revenue] ) )
 VAR revRank = RANKX ( sold, [Revenue], , DESC )
 RETURN
     IF (
@@ -445,6 +445,9 @@ RETURN
     mm("Watch Margin", "IF ( [Watch List Flag] = 1, [Profit Margin %] )", PCT1, "6 Products"),
     mm("Watch Lines", "IF ( [Watch List Flag] = 1, [Valid Items] )", INT, "6 Products"),
     mm("Watch Font Color", f'IF ( [Profit] < 0, "{BAD}", "{INK}" )', None, "6 Products"),
+    # ---- card text (millions, so cards never truncate whatever the locale) ----
+    *[mm(f"{m_} (M)", f'FORMAT ( [{m_}] / 1000000, "$0.00" ) & "M"', None, "7 Text")
+      for m_ in ("Revenue", "Profit", "Discount Spend", "Discount Above 10%")],
     # ---- text ----
     mm("Alert 1", """
 "First Class late on "
@@ -738,6 +741,7 @@ class Page:
 
 
 def textbox(page, vname, x, y, w, h, text, size=10, color=INK2, bold=False):
+    h = max(h, round(size * 2.9))
     run = {"value": text, "textStyle": {"fontFamily": "Segoe UI Semibold" if bold else "Segoe UI",
                                         "fontSize": f"{size}pt", "color": color}}
     page.add(vname, "textbox", x, y, w, h, objects={"general": [{"properties": {"paragraphs": [{"textRuns": [run]}]}}]},
@@ -803,22 +807,23 @@ def slicer(page, vname, x, y, w, h, field, label, mode, sync):
 
 
 def column_chart(page, vname, x, y, w, h, cat, y_measure, title, subtitle=None, color_measure=None, labels=True,
-                 sort=None, tooltips=()):
-    q = {"Category": {"projections": [proj(cat, active=True)]}, "Y": {"projections": [proj(fmeas(y_measure))]}}
+                 sort=None, tooltips=(), x_title=None, y_title=None):
+    q = {"Category": {"projections": [proj(cat, x_title, active=True)]},
+         "Y": {"projections": [proj(fmeas(y_measure), y_title)]}}
     if tooltips:
         q["Tooltips"] = {"projections": [proj(fmeas(t)) for t in tooltips]}
     dp = [{"properties": {"fill": mcolor(color_measure)}, "selector": WILDCARD}] if color_measure else \
          [{"properties": {"fill": solid(GREY)}, "selector": {"metadata": f"{M}.{y_measure}"}}]
     page.add(vname, "clusteredColumnChart", x, y, w, h, query=q, title=title, subtitle=subtitle, sort=sort, objects={
         "dataPoint": dp,
-        "labels": [props(show=labels, color=solid(INK2), fontSize=9.0)],
-        "valueAxis": [props(show=True, start=0.0, showAxisTitle=True, gridlineShow=True)],
-        "categoryAxis": [props(show=True, showAxisTitle=True, axisType="Categorical")],
+        "labels": [props(show=labels, color=solid(INK), fontSize=9.0, labelPosition="OutsideEnd")],
+        "valueAxis": [props(show=True, start=0.0, showAxisTitle=bool(y_title), gridlineShow=True)],
+        "categoryAxis": [props(show=True, showAxisTitle=bool(x_title), axisType="Categorical")],
     })
 
 
 def line_chart(page, vname, x, y, w, h, cat, series, title, subtitle=None, legend=None, sort=None, tooltips=(),
-               y_start=0.0, y_end=None, ref_line=None, y_title=None):
+               y_start=0.0, y_end=None, ref_line=None, y_title=None, legend_colors=None):
     q = {"Category": {"projections": [proj(cat, active=True)]},
          "Y": {"projections": [proj(fmeas(m_), d) for m_, d, _ in series]}}
     if legend:
@@ -831,8 +836,14 @@ def line_chart(page, vname, x, y, w, h, cat, series, title, subtitle=None, legen
         "legend": [props(show=bool(len(series) > 1 or legend), position="Top")],
         "valueAxis": [props(show=True, start=y_start, showAxisTitle=bool(y_title), **({"titleText": y_title} if y_title else {}),
                             **({"end": y_end} if y_end is not None else {}))],
-        "categoryAxis": [props(show=True)],
+        "categoryAxis": [props(show=True, showAxisTitle=False)],
     }
+    if legend and legend_colors:
+        kind = legend["Column"]
+        ent, prop = kind["Expression"]["SourceRef"]["Entity"], kind["Property"]
+        objects["dataPoint"] += [{"properties": {"fill": solid(col)}, "selector": {"data": [{"scopeId": {"Comparison": {
+            "ComparisonKind": 0, "Left": fcol(ent, prop), "Right": {"Literal": {"Value": f"'{val}'"}}}}}]}}
+            for val, col in legend_colors.items()]
     if ref_line is not None:
         objects["y1AxisReferenceLine"] = [{"properties": {"show": lit(True), "value": lit(float(ref_line[0])),
                                                           "lineColor": solid(INK2), "dataLabelShow": lit(True),
@@ -864,7 +875,7 @@ def build_pages() -> list[Page]:
     # ---------------- 1 Summary ----------------
     p = Page("summary", "1 Summary", 720)
     header(p, "Takeaway Summary")
-    kpis = [("Revenue", "Revenue"), ("Profit", "Profit"), ("Profit Margin %", "Profit margin"),
+    kpis = [("Revenue (M)", "Revenue"), ("Profit (M)", "Profit"), ("Profit Margin %", "Profit margin"),
             ("Late Rate %", "Late-delivery rate"), ("Orders", "Orders"), ("Avg Order Value", "Avg order value")]
     card(p, "kpis", 24, 194, 1232, 84, kpis, value_size=24, red=("Late Rate %",))
     card(p, "kpis_mom", 24, 278, 1232, 34,
@@ -889,8 +900,9 @@ def build_pages() -> list[Page]:
     for i, (mode, promise) in enumerate([("Same Day", 0), ("First Class", 1), ("Second Class", 2), ("Standard Class", 4)]):
         column_chart(p, f"dist_{i}", 24 + i * 312, 294, 296, 250, fcol("fact_order_items", "actual_days"),
                      f"Share of Items ({mode})", f"{mode}: promise {promise} day{'s' if promise != 1 else ''}",
-                     "Share of items by actual shipping days; red = late", color_measure=f"Bar Color ({mode})",
-                     sort=[{"field": fcol("fact_order_items", "actual_days"), "direction": "Ascending"}])
+                     "Red = later than promised", color_measure=f"Bar Color ({mode})",
+                     sort=[{"field": fcol("fact_order_items", "actual_days"), "direction": "Ascending"}],
+                     x_title="Actual shipping days")
     matrix(p, "heatmap", 24, 556, 720, 540, fcol("dim_geography", "order_region"), fcol("dim_shipping", "shipping_mode"),
            "Late Rate % (heatmap)", "Heatmap Color", "Heatmap Font Color",
            "Late rate by shipping mode and region: columns differ, rows barely do",
@@ -903,10 +915,10 @@ def build_pages() -> list[Page]:
         sort=[{"field": fmeas("Promised Days"), "direction": "Ascending"}],
         value_formats=[{"properties": {"fontColor": solid(BAD)}, "selector": {"metadata": f"{M}.Late Rate %"}}])
     textbox(p, "whatif_title", 760, 790, 496, 30, "What if the promise matched reality?", size=13, color=INK, bold=True)
-    slicer(p, "s_first", 760, 822, 240, 56, fcol("First Class Promise", "First Class Promise"), "First Class promise (days)",
+    slicer(p, "s_first", 760, 822, 240, 56, fcol("First Class Promise", "First Class Promise"), "First Class promise (default 2 days)",
            "Dropdown", "p_first")
     slicer(p, "s_second", 1016, 822, 240, 56, fcol("Second Class Promise", "Second Class Promise"),
-           "Second Class promise (days)", "Dropdown", "p_second")
+           "Second Class promise (default 4 days)", "Dropdown", "p_second")
     card(p, "whatif", 760, 890, 496, 96, [("Late Rate %", "Late rate today"),
                                            ("Late Rate % (what-if promises)", "With these promises"),
                                            ("Late Rate Change (what-if)", "Change")], value_size=20)
@@ -915,33 +927,35 @@ def build_pages() -> list[Page]:
             "Actual shipping days held as observed. p2_repromise_whatif.sql", size=9)
     line_chart(p, "trend", 24, 1108, 1232, 176, fcol("dim_date", "month_start"), [("Late Rate %", "Late rate", None)],
                "Monthly late rate by mode: flat for 33 months, so the problem is structural",
-               "p2_late_trend.sql", legend=fcol("dim_shipping", "shipping_mode"), y_end=1.0)
+               "p2_late_trend.sql", legend=fcol("dim_shipping", "shipping_mode"), y_end=1.0,
+               legend_colors={"First Class": BAD, "Second Class": "#E5716E", "Standard Class": GREY,
+                              "Same Day": "#CFCDC6"})
     pages.append(p)
 
     # ---------------- 3 Discounts ----------------
     p = Page("discounts", "3 Discounts", 1480)
     header(p, "Takeaway Discounts")
-    card(p, "kpis", 24, 194, 1232, 88, [("Profit Margin %", "Profit margin"), ("Discount Spend", "Discount spend"),
-                                         ("Discount Above 10%", "Discount above 10%"),
+    card(p, "kpis", 24, 194, 1232, 88, [("Profit Margin %", "Profit margin"), ("Discount Spend (M)", "Discount spend"),
+                                         ("Discount Above 10% (M)", "Discount above 10%"),
                                          ("Units above 10%", "Units/line above 10%"),
                                          ("Units at or below 10%", "Units/line at or below 10%")],
-         red=("Discount Above 10%",))
+         red=("Discount Above 10% (M)",))
     band_sort = [{"field": fcol("fact_order_items", "Discount Band"), "direction": "Ascending"}]
     column_chart(p, "margin_band", 24, 294, 608, 290, fcol("fact_order_items", "Discount Band"), "Profit Margin %",
                  "Profit margin by discount band (% of net revenue)", "Flat bands: the discount bought nothing extra · p3_margin_by_band.sql",
-                 sort=band_sort)
+                 sort=band_sort, x_title="Discount band (applied rate)")
     column_chart(p, "units_band", 648, 294, 608, 290, fcol("fact_order_items", "Discount Band"), "Avg Units per Line",
                  "Units per order line by discount band", "If discounts drove volume these would rise to the right",
-                 sort=band_sort)
+                 sort=band_sort, x_title="Discount band (applied rate)")
     textbox(p, "cap_title", 24, 598, 400, 30, "What-if: cap discounts at a maximum rate", size=13, color=INK, bold=True)
     slicer(p, "s_cap", 24, 630, 400, 56, fcol("Max Discount", "Max Discount"), "Max discount rate (default 10%)",
            "Dropdown", "p_cap")
-    card(p, "cap_cards", 24, 694, 400, 250, [
-        ("Items Above Cap", "Items above the cap"),
-        ("Profit Recovered per Year (volume holds)", "High · volume holds ($/yr)"),
-        ("Profit Recovered per Year (central)", "Central · data elasticity ($/yr)"),
-        ("Profit Recovered per Year (low)", "Low · elasticity −1.5 ($/yr)"),
-        ("Break-even Volume Loss %", "Break-even volume loss")], cols=1, value_size=14)
+    card(p, "cap_items", 24, 694, 400, 72, [("Items Above Cap", "Items above the cap")], value_size=16)
+    for k, (m_, lbl) in enumerate([("Profit Recovered per Year (volume holds)", "High · volume holds ($/yr)"),
+                                   ("Profit Recovered per Year (central)", "Central · data elasticity ($/yr)"),
+                                   ("Profit Recovered per Year (low)", "Low · elasticity −1.5 ($/yr)"),
+                                   ("Break-even Volume Loss %", "Break-even volume loss")]):
+        card(p, f"cap_{k}", 24 + (k % 2) * 204, 772 + (k // 2) * 86, 196, 80, [(m_, lbl)], value_size=16)
     textbox(p, "cap_note", 24, 950, 400, 110,
             "Items above the cap are re-priced at the cap with unit cost fixed. High assumes volume holds; central "
             "applies the elasticity measured in the data (none detected); low assumes a price elasticity of −1.5, "
@@ -1009,9 +1023,9 @@ def build_pages() -> list[Page]:
                [("Pareto Share (top 30)", "Cumulative profit share", GREY_DARK)],
                "Pareto: cumulative share of profit, top 30 products by profit",
                "Profit is as concentrated as revenue · p5_product_pareto.sql",
-               sort=[{"field": fmeas("Profit"), "direction": "Descending"}], tooltips=("Profit", "Revenue"),
+               sort=[{"field": fmeas("Pareto Share (top 30)"), "direction": "Ascending"}],
                y_end=1.0, ref_line=(0.8, "80% of profit"))
-    table(p, "ranking", 24, 606, 760, 440, [
+    table(p, "ranking", 24, 606, 700, 440, [
         proj(fcol("dim_product", "product_name"), "Product"), proj(fcol("dim_product", "category_name"), "Category"),
         proj(fmeas("Top15 Revenue"), "Revenue"), proj(fmeas("Top15 Profit"), "Profit"),
         proj(fmeas("Top15 Margin"), "Margin"), proj(fmeas("Top15 Cumulative Share"), "Cum. profit"),
@@ -1022,7 +1036,7 @@ def build_pages() -> list[Page]:
                                                     "axisColor": solid("#FFFFFF"), "reverseDirection": lit(False),
                                                     "hideText": lit(False)}},
                         "selector": {"metadata": f"{M}.Top15 Profit"}}])
-    table(p, "watch", 800, 606, 456, 440, [
+    table(p, "watch", 740, 606, 516, 440, [
         proj(fcol("dim_product", "product_name"), "Product"), proj(fmeas("Watch Revenue"), "Revenue"),
         proj(fmeas("Watch Profit"), "Profit"), proj(fmeas("Watch Margin"), "Margin"), proj(fmeas("Watch Lines"), "Lines")],
         '"Sells well, loses money" watch list', "Top-half revenue with margin < 10%, or loss-making · p5_sells_well_loses_money.sql",

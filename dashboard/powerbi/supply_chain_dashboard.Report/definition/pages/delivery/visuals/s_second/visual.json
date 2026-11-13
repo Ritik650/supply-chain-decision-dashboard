@@ -28,7 +28,7 @@
               },
               "queryRef": "Second Class Promise.Second Class Promise",
               "nativeQueryRef": "Second Class Promise",
-              "displayName": "Second Class promise (days)",
+              "displayName": "Second Class promise (default 4 days)",
               "active": true
             }
           ]

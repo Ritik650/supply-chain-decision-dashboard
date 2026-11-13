@@ -40,5 +40,7 @@ gif:
 eval-oracle:        ## harness self-check, no API key needed
 	$(PY) genai/eval/run_eval.py --oracle --set all --tag oracle
 
-eval:               ## needs GEMINI_API_KEY (or an OpenAI-compatible endpoint)
-	$(PY) genai/eval/run_eval.py --prompt genai/prompt.md --set test --tag v1 --sleep 4
+eval:               ## needs GROQ_API_KEY in .env (or GEMINI_API_KEY / an OpenAI-compatible endpoint)
+	$(PY) genai/eval/run_eval.py --prompt genai/prompt.md --set test --tag v1
+	$(PY) genai/eval/run_eval.py --prompt genai/prompt_v2.md --set test --tag v2
+	$(PY) genai/eval/run_eval.py --prompt genai/prompt_v2.md --set fresh --tag v2

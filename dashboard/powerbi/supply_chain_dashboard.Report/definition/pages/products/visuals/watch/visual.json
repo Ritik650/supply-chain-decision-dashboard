@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "watch",
   "position": {
-    "x": 800,
+    "x": 740,
     "y": 618,
     "z": 1200,
-    "width": 456,
+    "width": 516,
     "height": 440,
     "tabOrder": 1200
   },

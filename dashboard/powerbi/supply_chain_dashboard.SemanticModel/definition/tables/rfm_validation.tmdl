@@ -57,3 +57,4 @@ table rfm_validation
 				    Typed
 
 	annotation PBI_ResultType = Table
+

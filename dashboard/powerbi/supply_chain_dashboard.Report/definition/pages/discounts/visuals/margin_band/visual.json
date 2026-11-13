@@ -28,6 +28,7 @@
               },
               "queryRef": "fact_order_items.Discount Band",
               "nativeQueryRef": "Discount Band",
+              "displayName": "Discount band (applied rate)",
               "active": true
             }
           ]
@@ -106,7 +107,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#6B6A65'"
+                      "Value": "'#111110'"
                     }
                   }
                 }
@@ -116,6 +117,13 @@
               "expr": {
                 "Literal": {
                   "Value": "9.0D"
+                }
+              }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'OutsideEnd'"
                 }
               }
             }
@@ -142,7 +150,7 @@
             "showAxisTitle": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },

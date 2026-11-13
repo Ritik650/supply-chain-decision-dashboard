@@ -28,7 +28,7 @@
               },
               "queryRef": "First Class Promise.First Class Promise",
               "nativeQueryRef": "First Class Promise",
-              "displayName": "First Class promise (days)",
+              "displayName": "First Class promise (default 2 days)",
               "active": true
             }
           ]
